@@ -176,7 +176,7 @@ def _topk_topp_kernel(
 
                     outlier_mask = (logits_blk > outlier_pivot) & mask_n
                     cumulative_pos = tl.cast(
-                        tl.cumsum(outlier_mask) - 1 + num_outliers, tl.int32
+                        tl.cumsum(tl.where(outlier_mask, 1, 0)) - 1 + num_outliers, tl.int32
                     )
                     num_outliers += tl.sum(outlier_mask)
                     write_pos = tl.where(outlier_mask, cumulative_pos, -1)
@@ -409,10 +409,10 @@ def _topk_topp_kernel(
                                         tl.abs(probs_blk - duplicate_logit) < 1e-9
                                     )
                                     duplicate_count = (
-                                        tl.cumsum(duplicate_mask) + num_kept
+                                        tl.cumsum(tl.where(duplicate_mask,1,0)) + num_kept.to(tl.int32)
                                     )
                                     duplicate_keep_mask = (
-                                        duplicate_count <= num_keep
+                                        duplicate_count <= num_keep.to(tl.int32)
                                     ) & duplicate_mask
                                     duplicate_remove_mask = (
                                         duplicate_mask & ~duplicate_keep_mask
@@ -465,9 +465,9 @@ def _topk_topp_kernel(
                                 duplicate_mask = (
                                     tl.abs(probs_blk - duplicate_logit) < 1e-9
                                 )
-                                duplicate_count = tl.cumsum(duplicate_mask) + num_kept
+                                duplicate_count = tl.cumsum(tl.where(duplicate_mask,1,0)) + num_kept.to(tl.int32)
                                 duplicate_keep_mask = (
-                                    duplicate_count <= num_keep
+                                    duplicate_count <= num_keep.to(tl.int32)
                                 ) & duplicate_mask
                                 duplicate_remove_mask = (
                                     duplicate_mask & ~duplicate_keep_mask
@@ -483,7 +483,7 @@ def _topk_topp_kernel(
                                 sum_exp_logits += tl.sum(probs_blk)
 
                                 cumulative_pos = tl.cast(
-                                    tl.cumsum(outlier_mask) - 1 + num_outliers_2,
+                                    tl.cumsum(tl.where(outlier_mask,1,0)) - 1 + num_outliers_2,
                                     tl.int32,
                                 )
                                 num_outliers_2 += tl.sum(outlier_mask)
@@ -667,7 +667,7 @@ def _topk_topp_kernel(
                     outlier_mask = (probs_blk > outlier_prob) & mask_n
                     sum_outlier_probs += tl.sum(outlier_mask * probs_blk)
                     cumulative_pos = tl.cast(
-                        tl.cumsum(outlier_mask) - 1 + num_outliers, tl.int32
+                        tl.cumsum(tl.where(outlier_mask, 1, 0)) - 1 + num_outliers, tl.int32
                     )
                     num_outliers += tl.sum(outlier_mask)
                     write_pos = tl.where(outlier_mask, cumulative_pos, -1)
@@ -843,8 +843,8 @@ def _topk_topp_kernel(
                     duplicate_mask = (
                         tl.abs(logits_blk - duplicate_logit) < 1e-9
                     ) & mask_n
-                    duplicate_count = tl.cumsum(duplicate_mask) + num_kept
-                    duplicate_keep_mask = (duplicate_count <= num_keep) & duplicate_mask
+                    duplicate_count = tl.cumsum(tl.where(duplicate_mask,1,0)) + num_kept.to(tl.int32)
+                    duplicate_keep_mask = (duplicate_count <= num_keep.to(tl.int32)) & duplicate_mask
                     duplicate_remove_mask = duplicate_mask & ~duplicate_keep_mask
                     num_kept += tl.sum(duplicate_keep_mask)
                     keep_mask = keep_mask & (~duplicate_remove_mask)
@@ -904,7 +904,7 @@ def apply_top_k_top_p_triton(
         p_ptr = logits  # Dummy pointer (won't be read)
 
     num_sm = num_compute_units(logits.device.index)
-    NUM_PROGRAMS = min(num_sm, batch_size)
+    NUM_PROGRAMS = min(num_sm, batch_size) * 2 
 
     # Cache per-Triton Program buffer on each device.
     buf_key = (logits.device, logits.dtype, vocab_size)
@@ -936,7 +936,7 @@ def apply_top_k_top_p_triton(
     elif logits.device.type == "xpu":
         block_size, block_size_trunc = 4096, 2048
     else:
-        block_size, block_size_trunc = 8192, 4096
+        block_size, block_size_trunc = 2048, 1024
 
     _topk_topp_kernel[(NUM_PROGRAMS,)](
         logits,
