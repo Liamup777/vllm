@@ -12,6 +12,7 @@ from vllm.v1.worker.gpu.buffer_utils import (
     UvaBackedTensor,
     _load_ptr,
 )
+from vllm.v1.worker.gpu.triton_shape_dump import dump_triton_kernel_shapes
 
 
 class BlockTables:
@@ -182,6 +183,32 @@ class BlockTables:
         num_reqs = idx_mapping.shape[0]
         num_groups = self.num_kv_cache_groups
         slot_mappings = self.slot_mappings if out is None else out
+        dump_triton_kernel_shapes(
+            "_compute_slot_mappings_kernel",
+            (num_groups, num_reqs + 1),
+            {
+                "max_num_tokens": slot_mappings.shape[1],
+                "idx_mapping": idx_mapping,
+                "query_start_loc": query_start_loc,
+                "pos": positions,
+                "block_table_ptrs": self.block_table_ptrs,
+                "block_table_strides": self.block_table_strides,
+                "block_sizes": self.block_sizes_tensor,
+                "slot_mappings": slot_mappings,
+                "slot_mappings_stride": slot_mappings.stride(0),
+                "cp_rank": self.cp_rank,
+                "CP_SIZE": self.cp_size,
+                "CP_INTERLEAVE": self.cp_interleave,
+                "PAD_ID": PAD_SLOT_ID,
+                "TRITON_BLOCK_SIZE": 1024,
+            },
+            launch_config={
+                "kv_cache_groups": num_groups,
+                "request_programs": num_reqs + 1,
+                "token_tile_size": 1024,
+                "max_num_tokens": slot_mappings.shape[1],
+            },
+        )
         _compute_slot_mappings_kernel[(num_groups, num_reqs + 1)](
             slot_mappings.shape[1],
             idx_mapping,

@@ -28,6 +28,8 @@ from vllm.v1.worker.utils import AttentionGroup
 
 logger = init_logger(__name__)
 
+_prepare_dflash_inputs_dumped: set[tuple[int, int, int]] = set()
+
 
 class DFlashSpeculator(DraftModelSpeculator):
     _speculator_name = "DFlash"  # For logging, so we can share methods with subclasses
@@ -671,6 +673,60 @@ def prepare_dflash_inputs(
     max_tokens_per_req = max_target_query_len + num_query_per_req
     BLOCK_SIZE = min(256, triton.next_power_of_2(max(1, max_tokens_per_req)))
     num_blocks = triton.cdiv(max_tokens_per_req, BLOCK_SIZE)
+
+    # Temporary debug dump: capture one real EngineCore batch for every
+    # observed launch shape before _prepare_dflash_inputs_kernel is launched.
+    shape = (num_reqs, max_target_query_len, num_blocks)
+    if shape not in _prepare_dflash_inputs_dumped:
+        torch.save(
+            {
+                "tensors": {
+                    # Output buffers (their shapes/dtypes are needed for replay).
+                    "out_input_ids": input_buffers.input_ids.cpu(),
+                    "out_query_positions": input_buffers.positions.cpu(),
+                    "out_query_start_loc": input_buffers.query_start_loc.cpu(),
+                    "out_seq_lens": input_buffers.seq_lens.cpu(),
+                    "out_query_slot_mapping": query_slot_mapping.cpu(),
+                    "out_context_positions": context_positions.cpu(),
+                    "out_context_slot_mapping": context_slot_mapping.cpu(),
+                    "out_sample_indices": sample_indices.cpu(),
+                    "out_sample_pos": sample_pos.cpu(),
+                    "out_sample_idx_mapping": sample_idx_mapping.cpu(),
+                    "out_temperature": temperature.cpu(),
+                    "out_seeds": seeds.cpu(),
+                    # Actual operator inputs.
+                    "target_positions": input_batch.positions.cpu(),
+                    "target_query_start_loc": input_batch.query_start_loc.cpu(),
+                    "idx_mapping": input_batch.idx_mapping.cpu(),
+                    "last_sampled": last_sampled.cpu(),
+                    "next_prefill_tokens": next_prefill_tokens.cpu(),
+                    "num_sampled": num_sampled.cpu(),
+                    "num_rejected": num_rejected.cpu(),
+                    "temperature": input_temperature.cpu(),
+                    "seeds": input_seeds.cpu(),
+                    "block_table": block_table.cpu(),
+                    "num_scheduled_tokens": input_batch.num_scheduled_tokens.copy(),
+                },
+                "scalars": {
+                    "grid": (num_reqs, num_blocks),
+                    "block_table_stride": block_table.stride(0),
+                    "parallel_drafting_token_id": parallel_drafting_token_id,
+                    "block_size": block_size,
+                    "num_query_per_req": num_query_per_req,
+                    "num_speculative_steps": num_speculative_steps,
+                    "max_num_reqs": max_num_reqs,
+                    "max_num_tokens": max_num_tokens,
+                    "max_model_len": max_model_len,
+                    "SAMPLE_FROM_ANCHOR": sample_from_anchor,
+                    "PAD_SLOT_ID": PAD_SLOT_ID,
+                    "BLOCK_SIZE": BLOCK_SIZE,
+                },
+            },
+            "/home/lingmutian/tmp/prepare_dflash_inputs_"
+            f"r{num_reqs}_q{max_target_query_len}_b{num_blocks}.pt",
+        )
+        _prepare_dflash_inputs_dumped.add(shape)
+
     _prepare_dflash_inputs_kernel[(num_reqs, num_blocks)](
         input_buffers.input_ids,
         input_buffers.positions,

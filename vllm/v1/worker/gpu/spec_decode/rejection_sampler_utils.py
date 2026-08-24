@@ -4,6 +4,7 @@ import torch
 
 from vllm.triton_utils import tl, tldevice, triton
 from vllm.v1.worker.gpu.sample.gumbel import gumbel_block_argmax, tl_rand32
+from vllm.v1.worker.gpu.triton_shape_dump import dump_triton_kernel_shapes
 
 
 @triton.jit
@@ -924,6 +925,40 @@ def rejection_sample(
     draft_local_sumexp = target_logits.new_empty(
         num_logits, vocab_num_blocks, dtype=torch.float32
     )
+    dump_triton_kernel_shapes(
+        "_compute_local_logits_stats_kernel",
+        (num_logits, vocab_num_blocks),
+        {
+            "target_local_argmax": target_local_argmax,
+            "target_local_argmax_stride": target_local_argmax.stride(0),
+            "target_local_max": target_local_max,
+            "target_local_max_stride": target_local_max.stride(0),
+            "target_local_sumexp": target_local_sumexp,
+            "target_local_sumexp_stride": target_local_sumexp.stride(0),
+            "draft_local_max": draft_local_max,
+            "draft_local_max_stride": draft_local_max.stride(0),
+            "draft_local_sumexp": draft_local_sumexp,
+            "draft_local_sumexp_stride": draft_local_sumexp.stride(0),
+            "target_logits": target_logits,
+            "target_logits_stride": target_logits.stride(0),
+            "draft_logits": draft_logits,
+            "draft_logits_stride_0": draft_logits_stride_0,
+            "draft_logits_stride_1": draft_logits_stride_1,
+            "expanded_idx_mapping": expanded_idx_mapping,
+            "expanded_local_pos": expanded_local_pos,
+            "temperature": temperature,
+            "vocab_size": vocab_size,
+            "num_speculative_steps": num_speculative_steps,
+            "BLOCK_SIZE": VOCAB_BLOCK_SIZE,
+            "HAS_DRAFT_LOGITS": has_draft_logits,
+        },
+        launch_config={
+            "vocab_tile_size": VOCAB_BLOCK_SIZE,
+            "vocab_num_tiles": vocab_num_blocks,
+            "padded_vocab_num_tiles": padded_vocab_num_blocks,
+            "num_logits": num_logits,
+        },
+    )
     _compute_local_logits_stats_kernel[(num_logits, vocab_num_blocks)](
         target_local_argmax,
         target_local_argmax.stride(0),
@@ -1083,6 +1118,42 @@ def rejection_sample(
         num_reqs,
         resample_num_blocks,
         dtype=torch.float64 if use_fp64 else torch.float32,
+    )
+    dump_triton_kernel_shapes(
+        "_resample_kernel",
+        (num_reqs, resample_num_blocks),
+        {
+            "resampled_local_argmax": resampled_local_argmax,
+            "resampled_local_argmax_stride": resampled_local_argmax.stride(0),
+            "resampled_local_max": resampled_local_max,
+            "resampled_local_max_stride": resampled_local_max.stride(0),
+            "target_logits": target_logits,
+            "target_logits_stride": target_logits.stride(0),
+            "target_rejected_logsumexp": target_rejected_logsumexp,
+            "draft_logits": draft_logits,
+            "draft_logits_stride_0": draft_logits_stride_0,
+            "draft_logits_stride_1": draft_logits_stride_1,
+            "draft_rejected_logsumexp": draft_rejected_logsumexp,
+            "rejected_step": num_sampled,
+            "cu_num_logits": cu_num_logits,
+            "expanded_idx_mapping": expanded_idx_mapping,
+            "draft_sampled": draft_sampled,
+            "temperature": temperature,
+            "seed": seed,
+            "pos": pos,
+            "cumulative_log_p": cumulative_log_p,
+            "vocab_size": vocab_size,
+            "BLOCK_SIZE": RESAMPLE_BLOCK_SIZE,
+            "HAS_DRAFT_LOGITS": has_draft_logits,
+            "USE_FP64": use_fp64,
+            "USE_BLOCK_VERIFICATION": use_block_verification,
+        },
+        launch_config={
+            "vocab_tile_size": RESAMPLE_BLOCK_SIZE,
+            "vocab_num_tiles": resample_num_blocks,
+            "padded_vocab_num_tiles": padded_resample_num_blocks,
+            "num_reqs": num_reqs,
+        },
     )
     _resample_kernel[(num_reqs, resample_num_blocks)](
         resampled_local_argmax,

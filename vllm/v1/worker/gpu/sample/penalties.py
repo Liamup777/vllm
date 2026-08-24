@@ -9,6 +9,7 @@ from vllm.utils.math_utils import cdiv
 from vllm.utils.torch_utils import async_tensor_h2d
 from vllm.v1.worker.gpu.buffer_utils import UvaBackedTensor
 from vllm.v1.worker.gpu.states import RequestState
+from vllm.v1.worker.gpu.triton_shape_dump import dump_triton_kernel_shapes
 
 
 class PenaltiesState:
@@ -197,6 +198,30 @@ def apply_penalties(
     num_tokens, vocab_size = logits.shape
     BLOCK_SIZE = 8192
     num_blocks = triton.cdiv(vocab_size, BLOCK_SIZE)
+    dump_triton_kernel_shapes(
+        "_penalties_kernel",
+        (num_tokens, num_blocks),
+        {
+            "logits": logits,
+            "logits_stride": logits.stride(0),
+            "expanded_idx_mapping": expanded_idx_mapping,
+            "token_ids": token_ids,
+            "expanded_local_pos": expanded_local_pos,
+            "repetition_penalty": repetition_penalty,
+            "frequency_penalty": frequency_penalty,
+            "presence_penalty": presence_penalty,
+            "prompt_bin_mask": prompt_bin_mask,
+            "prompt_bin_mask_stride": prompt_bin_mask.stride(0),
+            "output_bin_counts": output_bin_counts,
+            "output_bin_counts_stride": output_bin_counts.stride(0),
+            "vocab_size": vocab_size,
+            "BLOCK_SIZE": BLOCK_SIZE,
+        },
+        launch_config={
+            "vocab_tile_size": BLOCK_SIZE,
+            "vocab_num_tiles": num_blocks,
+        },
+    )
     _penalties_kernel[(num_tokens, num_blocks)](
         logits,
         logits.stride(0),
@@ -283,6 +308,27 @@ def bincount(
     num_tokens = expanded_idx_mapping.shape[0]
     BLOCK_SIZE = 1024
     num_blocks = triton.cdiv(max_prefill_len, BLOCK_SIZE)
+    dump_triton_kernel_shapes(
+        "_bincount_kernel",
+        (num_tokens, num_blocks),
+        {
+            "expanded_idx_mapping": expanded_idx_mapping,
+            "all_token_ids": all_token_ids,
+            "all_token_ids_stride": all_token_ids.stride(0),
+            "prompt_len": prompt_len,
+            "prefill_len": prefill_len,
+            "prompt_bin_mask": prompt_bin_mask,
+            "prompt_bin_mask_stride": prompt_bin_mask.stride(0),
+            "output_bin_counts": output_bin_counts,
+            "output_bin_counts_stride": output_bin_counts.stride(0),
+            "BLOCK_SIZE": BLOCK_SIZE,
+        },
+        launch_config={
+            "token_tile_size": BLOCK_SIZE,
+            "max_prefill_len": max_prefill_len,
+            "prefill_num_tiles": num_blocks,
+        },
+    )
     _bincount_kernel[(num_tokens, num_blocks)](
         expanded_idx_mapping,
         all_token_ids,

@@ -8,6 +8,7 @@ from vllm.sampling_params import MAX_LOGPROB_TOKEN_IDS, SamplingParams
 from vllm.triton_utils import tl, triton
 from vllm.v1.outputs import LogprobsTensors
 from vllm.v1.worker.gpu.buffer_utils import StagedWriteTensor, UvaBackedTensor
+from vllm.v1.worker.gpu.triton_shape_dump import dump_triton_kernel_shapes
 
 # Upper bound on the topk kernel's per-iteration gather width.
 _MAX_TOPK_BLOCK = 1024
@@ -93,6 +94,26 @@ def compute_token_logprobs(
     # Cap the kernel's per-iteration width so very large num_logprobs requests
     # stream the gather in bounded-size chunks, avoiding excessive mem use.
     topk_block_size = min(triton.next_power_of_2(num_logprobs), _MAX_TOPK_BLOCK)
+    dump_triton_kernel_shapes(
+        "_topk_log_softmax_kernel",
+        (batch_size,),
+        {
+            "output": logprobs,
+            "logits": logits,
+            "logits_stride": logits.stride(0),
+            "topk_ids": token_ids,
+            "topk": num_logprobs,
+            "vocab_size": vocab_size,
+            "BLOCK_SIZE": 1024,
+            "TOPK_BLOCK_SIZE": topk_block_size,
+        },
+        launch_config={
+            "vocab_tile_size": 1024,
+            "vocab_num_tiles": triton.cdiv(vocab_size, 1024),
+            "topk_gather_tile_size": topk_block_size,
+            "topk_num_tiles": triton.cdiv(num_logprobs, topk_block_size),
+        },
+    )
     _topk_log_softmax_kernel[(batch_size,)](
         logprobs,
         logits,
@@ -169,6 +190,22 @@ def compute_topk_scores(
         scores = scores.masked_fill(~valid_mask, float("-inf"))
 
     token_ranks = torch.empty(batch_size, dtype=torch.int64, device=logits.device)
+    dump_triton_kernel_shapes(
+        "_ranks_kernel",
+        (batch_size,),
+        {
+            "output": token_ranks,
+            "logits": logits,
+            "logits_stride": logits.stride(0),
+            "token_ids": sampled_token_ids,
+            "vocab_size": vocab_size,
+            "BLOCK_SIZE": 8192,
+        },
+        launch_config={
+            "vocab_tile_size": 8192,
+            "vocab_num_tiles": triton.cdiv(vocab_size, 8192),
+        },
+    )
     _ranks_kernel[(batch_size,)](
         token_ranks,
         logits,
