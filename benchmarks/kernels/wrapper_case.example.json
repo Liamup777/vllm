@@ -1,0 +1,19 @@
+{
+  "kernel": "_topk_log_softmax_kernel",
+  "arguments": {
+    "logits": {
+      "shape": [1024, 151936],
+      "dtype": "torch.bfloat16",
+      "device": "cuda:0",
+      "initializer": "randn"
+    },
+    "token_ids": {
+      "shape": [1024, 6],
+      "dtype": "torch.int64",
+      "device": "cuda:0",
+      "initializer": "randint",
+      "low": 0,
+      "high": 151936
+    }
+  }
+}

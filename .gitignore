@@ -232,6 +232,7 @@ hip_compat.h
 
 # Benchmark dataset
 benchmarks/**/*.json
+!benchmarks/kernels/wrapper_case.example.json
 
 # Linting
 actionlint
