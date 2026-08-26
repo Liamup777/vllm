@@ -1,0 +1,35 @@
+{
+  "kernel": "_topk_log_softmax_kernel",
+  "grid": [42],
+  "launch_config": {
+    "vocab_tile_size": 1024,
+    "vocab_num_tiles": 149,
+    "topk_tile_size": 8
+  },
+  "arguments": {
+    "output": {
+      "shape": [42, 5],
+      "dtype": "torch.float32",
+      "device": "cuda:0"
+    },
+    "logits": {
+      "shape": [42, 151936],
+      "dtype": "torch.bfloat16",
+      "device": "cuda:0",
+      "initializer": "randn"
+    },
+    "logits_stride": 151936,
+    "topk_ids": {
+      "shape": [42, 5],
+      "dtype": "torch.int64",
+      "device": "cuda:0",
+      "initializer": "randint",
+      "low": 0,
+      "high": 151936
+    },
+    "topk": 5,
+    "vocab_size": 151936,
+    "BLOCK_SIZE": 1024,
+    "TOPK_BLOCK_SIZE": 8
+  }
+}

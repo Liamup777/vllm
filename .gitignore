@@ -233,6 +233,7 @@ hip_compat.h
 # Benchmark dataset
 benchmarks/**/*.json
 !benchmarks/kernels/wrapper_case.example.json
+!benchmarks/kernels/topk_log_softmax_grid42.example.json
 
 # Linting
 actionlint

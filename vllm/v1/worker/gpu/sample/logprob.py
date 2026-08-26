@@ -14,6 +14,18 @@ _MAX_TOPK_BLOCK = 1024
 
 
 @triton.jit
+def _read_clock64():
+    return tl.inline_asm_elementwise(
+        "mov.u64 $0, %clock64;",
+        "=l",
+        [],
+        dtype=tl.uint64,
+        is_pure=False,
+        pack=1,
+    )
+
+
+@triton.jit
 def _topk_log_softmax_kernel(
     output_ptr,
     logits_ptr,
@@ -55,6 +67,54 @@ def _topk_log_softmax_kernel(
         logits = logits.to(tl.float32)
         o = logits - max_val - lse
         tl.store(output_ptr + req_idx * topk + k_offset, o, mask=k_mask)
+
+
+@triton.jit
+def _topk_log_softmax_kernel_profiled(
+    output_ptr,
+    logits_ptr,
+    logits_stride,
+    topk_ids_ptr,
+    block_cycles_ptr,
+    topk,
+    vocab_size,
+    BLOCK_SIZE: tl.constexpr,
+    TOPK_BLOCK_SIZE: tl.constexpr,
+):
+    req_idx = tl.program_id(0).to(tl.int64)
+    start_cycle = _read_clock64()
+    row_ptr = logits_ptr + req_idx * logits_stride
+
+    max_val = float("-inf")
+    for i in range(0, vocab_size, BLOCK_SIZE):
+        block = i + tl.arange(0, BLOCK_SIZE)
+        logits = tl.load(row_ptr + block, mask=block < vocab_size, other=float("-inf"))
+        max_val = tl.max(tl.maximum(logits, max_val))
+    max_val = max_val.to(tl.float32)  # type: ignore
+
+    se = 0.0
+    for i in range(0, vocab_size, BLOCK_SIZE):
+        block = i + tl.arange(0, BLOCK_SIZE)
+        logits = tl.load(row_ptr + block, mask=block < vocab_size, other=0.0)
+        logits = logits.to(tl.float32)
+        e = tl.exp(logits - max_val)
+        e = tl.where(block < vocab_size, e, 0.0)
+        se += tl.sum(e)
+    lse = tl.log(se)
+
+    for j in range(0, topk, TOPK_BLOCK_SIZE):
+        k_offset = j + tl.arange(0, TOPK_BLOCK_SIZE)
+        k_mask = k_offset < topk
+        topk_ids = tl.load(
+            topk_ids_ptr + req_idx * topk + k_offset, mask=k_mask, other=0
+        )
+        logits = tl.load(row_ptr + topk_ids, mask=k_mask)
+        logits = logits.to(tl.float32)
+        o = logits - max_val - lse
+        tl.store(output_ptr + req_idx * topk + k_offset, o, mask=k_mask)
+
+    end_cycle = _read_clock64()
+    tl.store(block_cycles_ptr + req_idx, end_cycle - start_cycle)
 
 
 @triton.jit
@@ -104,6 +164,35 @@ def compute_token_logprobs(
         TOPK_BLOCK_SIZE=topk_block_size,
     )
     return logprobs
+
+
+def profile_token_logprobs_block_cycles(
+    logits: torch.Tensor, token_ids: torch.Tensor
+) -> torch.Tensor:
+    """Return elapsed GPU clock cycles for each logprob Triton program.
+
+    This diagnostic helper launches an instrumented version of the top-k
+    log-softmax kernel. Its result includes profiling overhead and must not be
+    used as the kernel's production latency.
+    """
+    batch_size, vocab_size = logits.shape
+    token_ids = token_ids.to(torch.int64)
+    num_logprobs = token_ids.shape[1]
+    logprobs = logits.new_empty((batch_size, num_logprobs), dtype=torch.float32)
+    block_cycles = torch.empty(batch_size, dtype=torch.int64, device=logits.device)
+    topk_block_size = min(triton.next_power_of_2(num_logprobs), _MAX_TOPK_BLOCK)
+    _topk_log_softmax_kernel_profiled[(batch_size,)](
+        logprobs,
+        logits,
+        logits.stride(0),
+        token_ids,
+        block_cycles,
+        num_logprobs,
+        vocab_size,
+        BLOCK_SIZE=1024,  # type: ignore
+        TOPK_BLOCK_SIZE=topk_block_size,
+    )
+    return block_cycles
 
 
 def compute_topk_scores(
