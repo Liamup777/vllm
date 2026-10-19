@@ -26,6 +26,7 @@ from vllm.model_executor.layers.fused_moe.prepare_finalize.no_dp_ep import (
     MoEPrepareAndFinalizeNoDPEPMonolithic,
 )
 from vllm.model_executor.layers.fused_moe.routed_experts_capturer import (
+    RoutedExpertsCaptureLayout,
     RoutedExpertsCapturer,
     RoutedExpertsSink,
     bind_routed_experts_capturer,
@@ -784,3 +785,152 @@ def test_v2_model_runner_accepts_routed_experts(monkeypatch):
     unsupported = VllmConfig._get_v2_model_runner_unsupported_features(config)
 
     assert "routed experts capture" not in unsupported
+
+
+def test_explicit_capture_layout_selects_padded_dp_block():
+    capturer = _capturer_with_buffer(dp_rank=1)
+    ids = torch.arange(14, dtype=torch.int32).view(-1, 1).repeat(1, 2)
+    layout = RoutedExpertsCaptureLayout(((7, 7),))
+
+    capturer.capture(layer_id=0, topk_ids=ids, layout=layout)
+
+    torch.testing.assert_close(capturer.device_buffer[:7, 0], ids[7:14])
+
+
+@pytest.mark.parametrize(
+    ("shard_sizes", "ranges", "expected_rows"),
+    [
+        ((3, 2), ((0, 5),), [0, 1, 2, 3, 4]),
+        ((7, 7), ((0, 3), (7, 2)), [0, 1, 2, 7, 8]),
+    ],
+)
+def test_explicit_capture_layout_gathers_and_skips_internal_padding(
+    shard_sizes, ranges, expected_rows
+):
+    capturer = _capturer_with_buffer()
+    group = object()
+    local = torch.arange(shard_sizes[1], dtype=torch.int32).repeat(2, 1).T
+    layout = RoutedExpertsCaptureLayout(ranges, group, shard_sizes)
+
+    def gather(outputs, input_, group):
+        assert input_.shape[0] == shard_sizes[1]
+        assert input_.is_contiguous()
+        for rank, output in enumerate(outputs):
+            output.copy_(
+                torch.arange(sum(shard_sizes[:rank]), sum(shard_sizes[: rank + 1]))
+                .to(torch.int32)
+                .view(-1, 1)
+                .repeat(1, 2)
+            )
+
+    with (
+        patch(f"{_REC_MODULE}.dist.get_world_size", return_value=2),
+        patch(f"{_REC_MODULE}.dist.get_rank", return_value=1),
+        patch(f"{_REC_MODULE}.dist.all_gather", side_effect=gather),
+    ):
+        capturer.capture(layer_id=0, topk_ids=local, layout=layout)
+
+    expected = torch.tensor(expected_rows, dtype=torch.int32).view(-1, 1).repeat(1, 2)
+    torch.testing.assert_close(capturer.device_buffer[:5, 0], expected)
+
+
+def test_explicit_capture_layout_rejects_invalid_source_rows():
+    capturer = _capturer_with_buffer()
+    with pytest.raises(ValueError, match="source range"):
+        capturer.capture(
+            0,
+            torch.ones((2, 2), dtype=torch.int32),
+            layout=RoutedExpertsCaptureLayout(((1, 2),)),
+        )
+
+
+def test_router_forwards_layout_before_eplb_mapping():
+    router = _make_router()
+    recorded = []
+    layout = RoutedExpertsCaptureLayout(((0, 2),))
+    router.set_capture_fn(lambda ids, *, layout: recorded.append((ids.clone(), layout)))
+
+    _, routed_ids = router.select_experts(
+        torch.ones((2, 4)), torch.ones((2, 4)), capture_layout=layout
+    )
+
+    torch.testing.assert_close(recorded[0][0], routed_ids - 10)
+    assert recorded[0][1] is layout
+
+
+def test_capture_layout_keeps_empty_rank_in_collective():
+    capturer = _capturer_with_buffer()
+    layout = RoutedExpertsCaptureLayout((), object(), (2, 0))
+    with (
+        patch(f"{_REC_MODULE}.dist.get_world_size", return_value=2),
+        patch(f"{_REC_MODULE}.dist.get_rank", return_value=1),
+        patch(f"{_REC_MODULE}.dist.all_gather") as gather,
+    ):
+        capturer.capture(0, torch.empty((0, 2), dtype=torch.int32), layout=layout)
+    gather.assert_called_once()
+    assert (capturer.device_buffer == -1).all()
+
+
+@pytest.mark.parametrize(
+    ("sizes", "group", "message"),
+    [
+        ((2,), object(), "group size"),
+        ((2, -1), object(), "non-negative"),
+        ((2, 3), object(), "local rows"),
+        ((2, 2), None, "require a gather group"),
+    ],
+)
+def test_capture_rejects_invalid_collective_layout_before_gather(sizes, group, message):
+    capturer = _capturer_with_buffer()
+    with (
+        patch(f"{_REC_MODULE}.dist.get_world_size", return_value=2),
+        patch(f"{_REC_MODULE}.dist.get_rank", return_value=1),
+        patch(f"{_REC_MODULE}.dist.all_gather") as gather,
+        pytest.raises(ValueError, match=message),
+    ):
+        capturer.capture(
+            0,
+            torch.ones((2, 2), dtype=torch.int32),
+            layout=RoutedExpertsCaptureLayout(((0, 2),), group, sizes),
+        )
+    gather.assert_not_called()
+    assert (capturer.device_buffer == -1).all()
+
+
+def test_capture_layout_rejects_invalid_layer_before_collective():
+    capturer = _capturer_with_buffer()
+    with (
+        patch(f"{_REC_MODULE}.dist.all_gather") as gather,
+        pytest.raises(IndexError, match="layer"),
+    ):
+        capturer.capture(
+            -1,
+            torch.ones((2, 2), dtype=torch.int32),
+            layout=RoutedExpertsCaptureLayout(((0, 4),), object(), (2, 2)),
+        )
+    gather.assert_not_called()
+
+
+def test_capture_layout_does_not_write_past_buffer_capacity():
+    capturer = _capturer_with_buffer(max_tokens=2)
+    with pytest.raises(ValueError, match="capacity"):
+        capturer.capture(
+            0,
+            torch.ones((3, 2), dtype=torch.int32),
+            layout=RoutedExpertsCaptureLayout(((0, 3),)),
+        )
+    assert (capturer.device_buffer == -1).all()
+
+
+def test_default_router_keeps_legacy_selection_signature(monkeypatch):
+    router = _make_router()
+    expected = (torch.ones((2, 2)), torch.ones((2, 2), dtype=torch.int32))
+
+    def select(
+        hidden_states, router_logits, topk_indices_dtype=None, *, input_ids=None
+    ):
+        return expected
+
+    monkeypatch.setattr(router, "_select_experts", select)
+    result = router.select_experts(torch.ones((2, 4)), torch.ones((2, 4)))
+    assert result[0] is expected[0] and result[1] is expected[1]

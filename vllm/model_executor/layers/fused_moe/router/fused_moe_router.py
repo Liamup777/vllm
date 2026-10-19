@@ -2,8 +2,14 @@
 # SPDX-FileCopyrightText: Copyright contributors to the vLLM project
 from abc import ABC, abstractmethod
 from collections.abc import Callable
+from typing import TYPE_CHECKING
 
 import torch
+
+if TYPE_CHECKING:
+    from vllm.model_executor.layers.fused_moe.routed_experts_capturer import (
+        RoutedExpertsCaptureLayout,
+    )
 
 from vllm.distributed.eplb.eplb_state import EplbLayerState
 from vllm.model_executor.layers.fused_moe.config import RoutingMethodType
@@ -25,7 +31,7 @@ class FusedMoERouter(ABC):
     @abstractmethod
     def set_capture_fn(
         self,
-        capture_fn: Callable[[torch.Tensor], None] | None,
+        capture_fn: Callable[..., None] | None,
     ) -> None:
         raise NotImplementedError
 
@@ -42,6 +48,7 @@ class FusedMoERouter(ABC):
         topk_indices_dtype: torch.dtype | None = None,
         *,
         input_ids: torch.Tensor | None = None,
+        capture_layout: "RoutedExpertsCaptureLayout | None" = None,
     ) -> tuple[torch.Tensor, torch.Tensor]:
         raise NotImplementedError
 
@@ -52,6 +59,7 @@ class FusedMoERouter(ABC):
         topk_indices_dtype: torch.dtype | None = None,
         *,
         input_ids: torch.Tensor | None = None,
+        capture_layout: "RoutedExpertsCaptureLayout | None" = None,
     ) -> tuple[torch.Tensor, torch.Tensor]:
         """Route the input hidden states to the top-k experts based on the
         router logits.
@@ -66,12 +74,21 @@ class FusedMoERouter(ABC):
             plain MoE implementations without redundant experts.
 
         """
-        topk_weights, topk_ids = self._select_experts(
-            hidden_states,
-            router_logits,
-            topk_indices_dtype=topk_indices_dtype,
-            input_ids=input_ids,
-        )
+        if capture_layout is None:
+            topk_weights, topk_ids = self._select_experts(
+                hidden_states,
+                router_logits,
+                topk_indices_dtype=topk_indices_dtype,
+                input_ids=input_ids,
+            )
+        else:
+            topk_weights, topk_ids = self._select_experts(
+                hidden_states,
+                router_logits,
+                topk_indices_dtype=topk_indices_dtype,
+                input_ids=input_ids,
+                capture_layout=capture_layout,
+            )
 
         # Write routing data for non-monolithic path (Triton, etc.)
         # (set by bind_routing_capture_to_model during capturer init)
