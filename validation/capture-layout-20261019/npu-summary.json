@@ -1,0 +1,29 @@
+{
+  "upstream_base": "852989f580820849113d67d13fd8053e279d0444",
+  "head": "bfed1cb65d2ae8c37b9ada7b45191bbb01224679",
+  "status": "PASS",
+  "per_rank_checks": 216,
+  "expert_ids": 2760,
+  "modes": [
+    "eager",
+    "actual ACL graph replay"
+  ],
+  "tp": 2,
+  "dp": [
+    1,
+    2
+  ],
+  "source_sha256": "daf2eea480ed8af351fe4f9eca8a8b5bf4105c6ca8853f683a2b7a11db5ceb39",
+  "backend_base": "e8824e648be0407cc5bee8a976d195716fc2336e",
+  "backend_sha256": {
+    "vllm_ascend/ops/fused_moe/prepare_finalize.py": "b2ad9db9c91dec35f7a6cbf96a9a3a8a9330e25238adf5007190908708104523",
+    "vllm_ascend/ops/fused_moe/dataclass/prepare_finalize.py": "989a595a842dff906c5abe1a22ea73a96800dbf40070e3d940f17c727c231b0a",
+    "vllm_ascend/ascend_forward_context.py": "30354d45aacbe8ef0babcf325ebb218a908ac0d7df3a63b1dedb6517f706f86a"
+  },
+  "packages": {
+    "torch": "2.10.0+cpu",
+    "torch-npu": "2.10.0.post4",
+    "vllm-ascend": "0.19.1rc2.dev2793+g784ae8320"
+  },
+  "scope": "Component integration: actual Ascend prepare -> BaseRouter -> capture; not model serving or selector/native expert-kernel validation."
+}

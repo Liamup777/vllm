@@ -1,0 +1,65 @@
+diff --git a/vllm_ascend/ops/fused_moe/prepare_finalize.py b/vllm_ascend/ops/fused_moe/prepare_finalize.py
+index f85e82b67..90421175a 100644
+--- a/vllm_ascend/ops/fused_moe/prepare_finalize.py
++++ b/vllm_ascend/ops/fused_moe/prepare_finalize.py
+@@ -41,11 +41,10 @@ from vllm_ascend.quantization.quant_type import QuantType
+ from vllm_ascend.quantization.utils import get_dynamic_mx_quant_scale_alg
+ 
+ 
+-def _capture_local_rows() -> int:
++def _capture_local_rows(dp_rank: int) -> int:
+     ctx = get_forward_context()
+     if ctx.dp_metadata is not None:
+-        rank = ctx.vllm_config.parallel_config.data_parallel_rank
+-        return int(ctx.dp_metadata.num_tokens_across_dp_cpu[rank].item())
++        return int(ctx.dp_metadata.num_tokens_across_dp_cpu[dp_rank].item())
+     return _EXTRA_CTX.num_tokens
+ 
+ 
+@@ -210,7 +209,7 @@ class PrepareAndFinalizeWithAll2All(PrepareAndFinalize):
+             capture_layout = _tp_capture_layout(
+                 self.moe_config.tp_group,
+                 shard_sizes,
+-                ((0, _capture_local_rows()),),
++                ((0, _capture_local_rows(self.moe_config.dp_rank)),),
+             )
+         return MoEPrepareOutput(
+             hidden_states=hidden_states,
+@@ -314,7 +313,7 @@ class PrepareAndFinalizeWithMC2(PrepareAndFinalizeWithAll2All):
+         """
+         self.replace_allreduce = replace_allreduce
+         mc2_mask = _EXTRA_CTX.mc2_mask
+-        local_rows = _capture_local_rows() if capture_enabled else 0
++        local_rows = _capture_local_rows(self.moe_config.dp_rank) if capture_enabled else 0
+         if self.replace_allreduce:
+             # SP shards use the local token count, not the largest DP batch.
+             # Select valid bits before adding padding for uniform MC2 batches.
+@@ -492,14 +491,14 @@ class PrepareAndFinalizeWithAllGather(PrepareAndFinalize):
+         capture_layout = None
+         if capture_enabled:
+             ctx = get_forward_context()
+-            local_rows = _capture_local_rows()
++            local_rows = _capture_local_rows(self.moe_config.dp_rank)
+             if ctx.dp_metadata is not None and ctx.dp_metadata.local_sizes is not None:
+                 sizes = ctx.dp_metadata.local_sizes
+-                dp_rank = ctx.vllm_config.parallel_config.data_parallel_rank
++                dp_rank = self.moe_config.dp_rank
+                 shards_per_dp = len(sizes) // len(ctx.dp_metadata.num_tokens_across_dp_cpu)
+                 start = sum(sizes[: dp_rank * shards_per_dp])
+             elif ctx.dp_metadata is not None:
+-                dp_rank = ctx.vllm_config.parallel_config.data_parallel_rank
++                dp_rank = self.moe_config.dp_rank
+                 start = int(ctx.dp_metadata.num_tokens_across_dp_cpu[:dp_rank].sum().item())
+             else:
+                 start = 0
+@@ -564,8 +563,8 @@ class PrepareAndFinalizeWithAllGather(PrepareAndFinalize):
+         capture_layout = None
+         if capture_enabled:
+             ctx = get_forward_context()
+-            local_rows = _capture_local_rows()
+-            dp_rank = ctx.vllm_config.parallel_config.data_parallel_rank
++            local_rows = _capture_local_rows(self.moe_config.dp_rank)
++            dp_rank = self.moe_config.dp_rank
+             dp_offset = dp_rank * _EXTRA_CTX.max_tokens_across_dp if self.moe_config.dp_size > 1 else 0
+             pcp_offset = (
+                 get_pcp_group().rank_in_group * _EXTRA_CTX.max_tokens_across_pcp
