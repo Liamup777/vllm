@@ -1,0 +1,28 @@
+<frozen runpy>:128: RuntimeWarning: 'torch.distributed.run' found in sys.modules after import of package 'torch.distributed', but prior to execution of 'torch.distributed.run'; this may result in unpredictable behaviour
+[rank0]:[W1019 17:04:40.158847730 NPUCachingAllocator.cpp:202] Warning: The current CANN and HDK(driver) versions require processing for 32 padding size, with memory allocation. (function operator())
+/usr/local/python3.12.13/lib/python3.12/site-packages/torch/distributed/c10d_logger.py:83: UserWarning: barrier(): using the device under current context. You can specify `device_id` in `init_process_group` to mute this warning.
+  return func(*args, **kwargs)
+PASS dp=0 tp=0 allgather eager
+PASS dp=0 tp=1 allgather eager
+PASS dp=0 tp=1 allgather graphPASS dp=0 tp=0 allgather graph
+
+PASS dp=0 tp=0 alltoall eagerPASS dp=0 tp=1 alltoall eager
+
+PASS dp=0 tp=0 alltoall graphPASS dp=0 tp=1 alltoall graph
+
+PASS dp=0 tp=1 alltoall_sp eagerPASS dp=0 tp=0 alltoall_sp eager
+
+PASS dp=0 tp=1 alltoall_sp graphPASS dp=0 tp=0 alltoall_sp graph
+
+PASS dp=0 tp=1 mc2 eagerPASS dp=0 tp=0 mc2 eager
+
+PASS dp=0 tp=1 mc2 graph
+PASS dp=0 tp=0 mc2 graph
+PASS dp=0 tp=1 mc2_sp eagerPASS dp=0 tp=0 mc2_sp eager
+
+PASS dp=0 tp=1 mc2_sp graph
+PASS dp=0 tp=0 mc2_sp graph
+PASS dp=0 tp=1 empty_capture eagerPASS dp=0 tp=0 empty_capture eager
+
+PASS dp=0 tp=1 empty_capture graph
+PASS dp=0 tp=0 empty_capture graph
