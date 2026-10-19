@@ -1,0 +1,1164 @@
+{
+  "status": "PASS",
+  "scope": "Scenario-based communication selection and layout assertions, response invariants; token ownership equivalence needs a reference run",
+  "arguments": {
+    "model": "/mnt/weight/Qwen3-30B-A3B",
+    "served_model": "moe",
+    "url": "http://127.0.0.1:18266",
+    "log_file": "/home/lingmutian/capture-main-20261019/e2e/results/05-ep-dp2-tp2-sp/server.log",
+    "dp": 2,
+    "tp": 2,
+    "sp": "on",
+    "expect_comm": "MC2,ALLTOALL",
+    "long_tokens": 2049,
+    "max_tokens": 8,
+    "output": "/home/lingmutian/capture-main-20261019/e2e/results/05-ep-dp2-tp2-sp/verification",
+    "reference_dir": null,
+    "scenario": "/home/lingmutian/capture-main-20261019/e2e/results/05-ep-dp2-tp2-sp/scenario.json",
+    "require_uneven_shards": false,
+    "require_internal_padding": false,
+    "skip_general_concurrency": false
+  },
+  "requests": [
+    {
+      "case": "boundary-15",
+      "requested_prompt_tokens": 15,
+      "config_hash": "26d327b8d8ed766c02e7f9cd28aa1e657e76a0e13296a1f182af2e6115eaaac0",
+      "input_hash": "c5be27f7e7e5fef1ffc55d99b07a6f2046d7dbb6c00bddab62993d293983040b",
+      "http": 200,
+      "status": "PASS",
+      "shape": [
+        22,
+        48,
+        8
+      ],
+      "generated_ids": [
+        12,
+        220,
+        16,
+        13,
+        16,
+        13,
+        16,
+        13
+      ],
+      "expert_min": 0,
+      "expert_max": 127,
+      "dtype": "uint8",
+      "response_validated": true,
+      "seconds": 2.111
+    },
+    {
+      "case": "boundary-16",
+      "requested_prompt_tokens": 16,
+      "config_hash": "26d327b8d8ed766c02e7f9cd28aa1e657e76a0e13296a1f182af2e6115eaaac0",
+      "input_hash": "71748e32b29cb3579c51dc105ec1dab8c467876fc57b65eb573128622bf0cedd",
+      "http": 200,
+      "status": "PASS",
+      "shape": [
+        23,
+        48,
+        8
+      ],
+      "generated_ids": [
+        724,
+        11,
+        323,
+        279,
+        1008,
+        374,
+        279,
+        825
+      ],
+      "expert_min": 0,
+      "expert_max": 127,
+      "dtype": "uint8",
+      "response_validated": true,
+      "seconds": 2.133
+    },
+    {
+      "case": "boundary-17",
+      "requested_prompt_tokens": 17,
+      "config_hash": "26d327b8d8ed766c02e7f9cd28aa1e657e76a0e13296a1f182af2e6115eaaac0",
+      "input_hash": "cba3f1e8656b18bf337254175020c36c11ad31356977e0c046c864561184cb88",
+      "http": 200,
+      "status": "PASS",
+      "shape": [
+        24,
+        48,
+        8
+      ],
+      "generated_ids": [
+        284,
+        220,
+        23,
+        15,
+        23,
+        15,
+        198,
+        2
+      ],
+      "expert_min": 0,
+      "expert_max": 127,
+      "dtype": "uint8",
+      "response_validated": true,
+      "seconds": 2.144
+    },
+    {
+      "case": "concurrent-129",
+      "requested_prompt_tokens": 129,
+      "config_hash": "26d327b8d8ed766c02e7f9cd28aa1e657e76a0e13296a1f182af2e6115eaaac0",
+      "input_hash": "bfa2955f9f328b86114edca532c8483bdd0f893034e92fa7e3bd7b214fea4e10",
+      "http": 200,
+      "status": "PASS",
+      "shape": [
+        136,
+        48,
+        8
+      ],
+      "generated_ids": [
+        279,
+        279,
+        279,
+        279,
+        279,
+        279,
+        279,
+        279
+      ],
+      "expert_min": 0,
+      "expert_max": 127,
+      "dtype": "uint8",
+      "response_validated": true,
+      "seconds": 2.193
+    },
+    {
+      "case": "concurrent-3",
+      "requested_prompt_tokens": 3,
+      "config_hash": "26d327b8d8ed766c02e7f9cd28aa1e657e76a0e13296a1f182af2e6115eaaac0",
+      "input_hash": "0b9c661821a4bd3d853c3b708ce7b5fbc37089dd15fd842691000d5835696a78",
+      "http": 200,
+      "status": "PASS",
+      "shape": [
+        10,
+        48,
+        8
+      ],
+      "generated_ids": [
+        279,
+        897,
+        315,
+        279,
+        7493,
+        400,
+        320,
+        64
+      ],
+      "expert_min": 0,
+      "expert_max": 127,
+      "dtype": "uint8",
+      "response_validated": true,
+      "seconds": 2.194
+    },
+    {
+      "case": "concurrent-385",
+      "requested_prompt_tokens": 385,
+      "config_hash": "26d327b8d8ed766c02e7f9cd28aa1e657e76a0e13296a1f182af2e6115eaaac0",
+      "input_hash": "b317942c9efddc884cbf5811bcd989291d2dd291d281d798157f63878256a4ab",
+      "http": 200,
+      "status": "PASS",
+      "shape": [
+        392,
+        48,
+        8
+      ],
+      "generated_ids": [
+        11,
+        323,
+        279,
+        1196,
+        374,
+        537,
+        5420,
+        311
+      ],
+      "expert_min": 0,
+      "expert_max": 127,
+      "dtype": "uint8",
+      "response_validated": true,
+      "seconds": 2.195
+    },
+    {
+      "case": "concurrent-7",
+      "requested_prompt_tokens": 7,
+      "config_hash": "26d327b8d8ed766c02e7f9cd28aa1e657e76a0e13296a1f182af2e6115eaaac0",
+      "input_hash": "bbe1816f18f250d282512a43e5f51c1bcd7c98473a84d5aa4c7d6bad0dfb527b",
+      "http": 200,
+      "status": "PASS",
+      "shape": [
+        14,
+        48,
+        8
+      ],
+      "generated_ids": [
+        11,
+        220,
+        16,
+        11,
+        220,
+        16,
+        11,
+        220
+      ],
+      "expert_min": 0,
+      "expert_max": 127,
+      "dtype": "uint8",
+      "response_validated": true,
+      "seconds": 2.196
+    },
+    {
+      "case": "long",
+      "requested_prompt_tokens": 2049,
+      "config_hash": "26d327b8d8ed766c02e7f9cd28aa1e657e76a0e13296a1f182af2e6115eaaac0",
+      "input_hash": "5731b620c22a1427e2d7119dada05ea703fd55825207e960cf76cd1fc2f34009",
+      "http": 200,
+      "status": "PASS",
+      "shape": [
+        2056,
+        48,
+        8
+      ],
+      "generated_ids": [
+        353,
+        871,
+        474,
+        653,
+        537,
+        3698,
+        279,
+        2701
+      ],
+      "expert_min": 0,
+      "expert_max": 127,
+      "dtype": "uint8",
+      "response_validated": true,
+      "seconds": 2.135
+    },
+    {
+      "case": "short-1",
+      "requested_prompt_tokens": 1,
+      "config_hash": "26d327b8d8ed766c02e7f9cd28aa1e657e76a0e13296a1f182af2e6115eaaac0",
+      "input_hash": "c711fa0bfab51af07e3aa6a6e55ed07d4f6f34d672d40f9165aa85e79f5cd64a",
+      "http": 200,
+      "status": "PASS",
+      "shape": [
+        8,
+        48,
+        8
+      ],
+      "generated_ids": [
+        1154,
+        220,
+        16,
+        24,
+        24,
+        24,
+        11,
+        220
+      ],
+      "expert_min": 0,
+      "expert_max": 127,
+      "dtype": "uint8",
+      "response_validated": true,
+      "seconds": 1.921
+    },
+    {
+      "case": "short-5",
+      "requested_prompt_tokens": 5,
+      "config_hash": "26d327b8d8ed766c02e7f9cd28aa1e657e76a0e13296a1f182af2e6115eaaac0",
+      "input_hash": "db33be92c929c8a58ea4f716a9463680ac58894f11f40cab62219ed05bbd38ae",
+      "http": 200,
+      "status": "PASS",
+      "shape": [
+        12,
+        48,
+        8
+      ],
+      "generated_ids": [
+        31952,
+        42223,
+        103960,
+        22243,
+        99507,
+        5122,
+        81800,
+        100145
+      ],
+      "expert_min": 0,
+      "expert_max": 127,
+      "dtype": "uint8",
+      "response_validated": true,
+      "seconds": 2.001
+    },
+    {
+      "case": "short-7",
+      "requested_prompt_tokens": 7,
+      "config_hash": "26d327b8d8ed766c02e7f9cd28aa1e657e76a0e13296a1f182af2e6115eaaac0",
+      "input_hash": "6c5c75cfae85b153234ff546f660c0c3b4d4a1f034429ccd135cb3d23763a3f1",
+      "http": 200,
+      "status": "PASS",
+      "shape": [
+        14,
+        48,
+        8
+      ],
+      "generated_ids": [
+        1154,
+        220,
+        17,
+        15,
+        16,
+        22,
+        11,
+        220
+      ],
+      "expert_min": 0,
+      "expert_max": 127,
+      "dtype": "uint8",
+      "response_validated": true,
+      "seconds": 2.015
+    }
+  ],
+  "log_audit": {
+    "errors": [],
+    "coverage_missing": [],
+    "methods": {
+      "MC2": 14784,
+      "ALLTOALL": 576
+    },
+    "ranks": [
+      [
+        0,
+        0
+      ],
+      [
+        0,
+        1
+      ],
+      [
+        1,
+        0
+      ],
+      [
+        1,
+        1
+      ]
+    ],
+    "matched_layer_calls": 15360,
+    "uneven_tp_shards_observed": false,
+    "internal_padding_skip_observed": false
+  },
+  "failures": [],
+  "selection_layout_audit": {
+    "errors": [],
+    "coverage_missing": [],
+    "selection_events": 320,
+    "layout_events": 15360,
+    "selections": [
+      {
+        "rank": [
+          0,
+          0
+        ],
+        "tokens": 1,
+        "expected": "MC2",
+        "actual": "MC2",
+        "calls": 66
+      },
+      {
+        "rank": [
+          0,
+          1
+        ],
+        "tokens": 1,
+        "expected": "MC2",
+        "actual": "MC2",
+        "calls": 66
+      },
+      {
+        "rank": [
+          1,
+          1
+        ],
+        "tokens": 1,
+        "expected": "MC2",
+        "actual": "MC2",
+        "calls": 66
+      },
+      {
+        "rank": [
+          1,
+          0
+        ],
+        "tokens": 1,
+        "expected": "MC2",
+        "actual": "MC2",
+        "calls": 66
+      },
+      {
+        "rank": [
+          1,
+          1
+        ],
+        "tokens": 5,
+        "expected": "MC2",
+        "actual": "MC2",
+        "calls": 1
+      },
+      {
+        "rank": [
+          1,
+          0
+        ],
+        "tokens": 5,
+        "expected": "MC2",
+        "actual": "MC2",
+        "calls": 1
+      },
+      {
+        "rank": [
+          0,
+          1
+        ],
+        "tokens": 5,
+        "expected": "MC2",
+        "actual": "MC2",
+        "calls": 1
+      },
+      {
+        "rank": [
+          0,
+          0
+        ],
+        "tokens": 5,
+        "expected": "MC2",
+        "actual": "MC2",
+        "calls": 1
+      },
+      {
+        "rank": [
+          0,
+          1
+        ],
+        "tokens": 7,
+        "expected": "MC2",
+        "actual": "MC2",
+        "calls": 1
+      },
+      {
+        "rank": [
+          0,
+          0
+        ],
+        "tokens": 7,
+        "expected": "MC2",
+        "actual": "MC2",
+        "calls": 1
+      },
+      {
+        "rank": [
+          1,
+          1
+        ],
+        "tokens": 7,
+        "expected": "MC2",
+        "actual": "MC2",
+        "calls": 1
+      },
+      {
+        "rank": [
+          1,
+          0
+        ],
+        "tokens": 7,
+        "expected": "MC2",
+        "actual": "MC2",
+        "calls": 1
+      },
+      {
+        "rank": [
+          1,
+          1
+        ],
+        "tokens": 2049,
+        "expected": "ALLTOALL",
+        "actual": "ALLTOALL",
+        "calls": 1
+      },
+      {
+        "rank": [
+          1,
+          0
+        ],
+        "tokens": 2049,
+        "expected": "ALLTOALL",
+        "actual": "ALLTOALL",
+        "calls": 1
+      },
+      {
+        "rank": [
+          0,
+          1
+        ],
+        "tokens": 2049,
+        "expected": "ALLTOALL",
+        "actual": "ALLTOALL",
+        "calls": 1
+      },
+      {
+        "rank": [
+          0,
+          0
+        ],
+        "tokens": 2049,
+        "expected": "ALLTOALL",
+        "actual": "ALLTOALL",
+        "calls": 1
+      },
+      {
+        "rank": [
+          0,
+          0
+        ],
+        "tokens": 15,
+        "expected": "MC2",
+        "actual": "MC2",
+        "calls": 1
+      },
+      {
+        "rank": [
+          1,
+          0
+        ],
+        "tokens": 15,
+        "expected": "MC2",
+        "actual": "MC2",
+        "calls": 1
+      },
+      {
+        "rank": [
+          0,
+          1
+        ],
+        "tokens": 15,
+        "expected": "MC2",
+        "actual": "MC2",
+        "calls": 1
+      },
+      {
+        "rank": [
+          1,
+          1
+        ],
+        "tokens": 15,
+        "expected": "MC2",
+        "actual": "MC2",
+        "calls": 1
+      },
+      {
+        "rank": [
+          1,
+          1
+        ],
+        "tokens": 16,
+        "expected": "MC2",
+        "actual": "MC2",
+        "calls": 1
+      },
+      {
+        "rank": [
+          1,
+          0
+        ],
+        "tokens": 16,
+        "expected": "MC2",
+        "actual": "MC2",
+        "calls": 1
+      },
+      {
+        "rank": [
+          0,
+          0
+        ],
+        "tokens": 16,
+        "expected": "MC2",
+        "actual": "MC2",
+        "calls": 1
+      },
+      {
+        "rank": [
+          0,
+          1
+        ],
+        "tokens": 16,
+        "expected": "MC2",
+        "actual": "MC2",
+        "calls": 1
+      },
+      {
+        "rank": [
+          0,
+          0
+        ],
+        "tokens": 17,
+        "expected": "ALLTOALL",
+        "actual": "ALLTOALL",
+        "calls": 1
+      },
+      {
+        "rank": [
+          0,
+          1
+        ],
+        "tokens": 17,
+        "expected": "ALLTOALL",
+        "actual": "ALLTOALL",
+        "calls": 1
+      },
+      {
+        "rank": [
+          1,
+          0
+        ],
+        "tokens": 17,
+        "expected": "ALLTOALL",
+        "actual": "ALLTOALL",
+        "calls": 1
+      },
+      {
+        "rank": [
+          1,
+          1
+        ],
+        "tokens": 17,
+        "expected": "ALLTOALL",
+        "actual": "ALLTOALL",
+        "calls": 1
+      },
+      {
+        "rank": [
+          1,
+          1
+        ],
+        "tokens": 514,
+        "expected": "ALLTOALL",
+        "actual": "ALLTOALL",
+        "calls": 1
+      },
+      {
+        "rank": [
+          0,
+          0
+        ],
+        "tokens": 514,
+        "expected": "ALLTOALL",
+        "actual": "ALLTOALL",
+        "calls": 1
+      },
+      {
+        "rank": [
+          0,
+          1
+        ],
+        "tokens": 514,
+        "expected": "ALLTOALL",
+        "actual": "ALLTOALL",
+        "calls": 1
+      },
+      {
+        "rank": [
+          1,
+          0
+        ],
+        "tokens": 514,
+        "expected": "ALLTOALL",
+        "actual": "ALLTOALL",
+        "calls": 1
+      },
+      {
+        "rank": [
+          0,
+          1
+        ],
+        "tokens": 2,
+        "expected": "MC2",
+        "actual": "MC2",
+        "calls": 7
+      },
+      {
+        "rank": [
+          1,
+          1
+        ],
+        "tokens": 2,
+        "expected": "MC2",
+        "actual": "MC2",
+        "calls": 7
+      },
+      {
+        "rank": [
+          0,
+          0
+        ],
+        "tokens": 2,
+        "expected": "MC2",
+        "actual": "MC2",
+        "calls": 7
+      },
+      {
+        "rank": [
+          1,
+          0
+        ],
+        "tokens": 2,
+        "expected": "MC2",
+        "actual": "MC2",
+        "calls": 7
+      }
+    ],
+    "layouts": [
+      {
+        "method": "MC2",
+        "rank": [
+          0,
+          1
+        ],
+        "before_rows": 1,
+        "expected_router_rows": 1,
+        "expected_shards": "[1, 1]",
+        "expected_ranges": "[[0, 1], [1, 0]]",
+        "calls": 3168
+      },
+      {
+        "method": "MC2",
+        "rank": [
+          0,
+          0
+        ],
+        "before_rows": 1,
+        "expected_router_rows": 1,
+        "expected_shards": "[1, 1]",
+        "expected_ranges": "[[0, 1], [1, 0]]",
+        "calls": 3168
+      },
+      {
+        "method": "MC2",
+        "rank": [
+          1,
+          1
+        ],
+        "before_rows": 1,
+        "expected_router_rows": 1,
+        "expected_shards": "[1, 1]",
+        "expected_ranges": "[[0, 1], [1, 0]]",
+        "calls": 3168
+      },
+      {
+        "method": "MC2",
+        "rank": [
+          1,
+          0
+        ],
+        "before_rows": 1,
+        "expected_router_rows": 1,
+        "expected_shards": "[1, 1]",
+        "expected_ranges": "[[0, 1], [1, 0]]",
+        "calls": 3168
+      },
+      {
+        "method": "MC2",
+        "rank": [
+          1,
+          1
+        ],
+        "before_rows": 1,
+        "expected_router_rows": 3,
+        "expected_shards": "[3, 3]",
+        "expected_ranges": "[[0, 1], [3, 0]]",
+        "calls": 48
+      },
+      {
+        "method": "MC2",
+        "rank": [
+          1,
+          0
+        ],
+        "before_rows": 1,
+        "expected_router_rows": 3,
+        "expected_shards": "[3, 3]",
+        "expected_ranges": "[[0, 1], [3, 0]]",
+        "calls": 48
+      },
+      {
+        "method": "MC2",
+        "rank": [
+          0,
+          1
+        ],
+        "before_rows": 3,
+        "expected_router_rows": 3,
+        "expected_shards": "[3, 3]",
+        "expected_ranges": "[[0, 3], [3, 2]]",
+        "calls": 48
+      },
+      {
+        "method": "MC2",
+        "rank": [
+          0,
+          0
+        ],
+        "before_rows": 3,
+        "expected_router_rows": 3,
+        "expected_shards": "[3, 3]",
+        "expected_ranges": "[[0, 3], [3, 2]]",
+        "calls": 48
+      },
+      {
+        "method": "MC2",
+        "rank": [
+          0,
+          1
+        ],
+        "before_rows": 1,
+        "expected_router_rows": 4,
+        "expected_shards": "[4, 4]",
+        "expected_ranges": "[[0, 1], [4, 0]]",
+        "calls": 48
+      },
+      {
+        "method": "MC2",
+        "rank": [
+          0,
+          0
+        ],
+        "before_rows": 1,
+        "expected_router_rows": 4,
+        "expected_shards": "[4, 4]",
+        "expected_ranges": "[[0, 1], [4, 0]]",
+        "calls": 48
+      },
+      {
+        "method": "MC2",
+        "rank": [
+          1,
+          1
+        ],
+        "before_rows": 4,
+        "expected_router_rows": 4,
+        "expected_shards": "[4, 4]",
+        "expected_ranges": "[[0, 4], [4, 3]]",
+        "calls": 48
+      },
+      {
+        "method": "MC2",
+        "rank": [
+          1,
+          0
+        ],
+        "before_rows": 4,
+        "expected_router_rows": 4,
+        "expected_shards": "[4, 4]",
+        "expected_ranges": "[[0, 4], [4, 3]]",
+        "calls": 48
+      },
+      {
+        "method": "ALLTOALL",
+        "rank": [
+          1,
+          1
+        ],
+        "before_rows": 1,
+        "expected_router_rows": 1,
+        "expected_shards": "[1, 1]",
+        "expected_ranges": "[[0, 1]]",
+        "calls": 48
+      },
+      {
+        "method": "ALLTOALL",
+        "rank": [
+          1,
+          0
+        ],
+        "before_rows": 1,
+        "expected_router_rows": 1,
+        "expected_shards": "[1, 1]",
+        "expected_ranges": "[[0, 1]]",
+        "calls": 48
+      },
+      {
+        "method": "ALLTOALL",
+        "rank": [
+          0,
+          1
+        ],
+        "before_rows": 1025,
+        "expected_router_rows": 1025,
+        "expected_shards": "[1025, 1025]",
+        "expected_ranges": "[[0, 2049]]",
+        "calls": 48
+      },
+      {
+        "method": "ALLTOALL",
+        "rank": [
+          0,
+          0
+        ],
+        "before_rows": 1025,
+        "expected_router_rows": 1025,
+        "expected_shards": "[1025, 1025]",
+        "expected_ranges": "[[0, 2049]]",
+        "calls": 48
+      },
+      {
+        "method": "MC2",
+        "rank": [
+          0,
+          0
+        ],
+        "before_rows": 1,
+        "expected_router_rows": 8,
+        "expected_shards": "[8, 8]",
+        "expected_ranges": "[[0, 1], [8, 0]]",
+        "calls": 48
+      },
+      {
+        "method": "MC2",
+        "rank": [
+          1,
+          0
+        ],
+        "before_rows": 8,
+        "expected_router_rows": 8,
+        "expected_shards": "[8, 8]",
+        "expected_ranges": "[[0, 8], [8, 7]]",
+        "calls": 48
+      },
+      {
+        "method": "MC2",
+        "rank": [
+          0,
+          1
+        ],
+        "before_rows": 1,
+        "expected_router_rows": 8,
+        "expected_shards": "[8, 8]",
+        "expected_ranges": "[[0, 1], [8, 0]]",
+        "calls": 48
+      },
+      {
+        "method": "MC2",
+        "rank": [
+          1,
+          1
+        ],
+        "before_rows": 8,
+        "expected_router_rows": 8,
+        "expected_shards": "[8, 8]",
+        "expected_ranges": "[[0, 8], [8, 7]]",
+        "calls": 48
+      },
+      {
+        "method": "MC2",
+        "rank": [
+          1,
+          1
+        ],
+        "before_rows": 1,
+        "expected_router_rows": 8,
+        "expected_shards": "[8, 8]",
+        "expected_ranges": "[[0, 1], [8, 0]]",
+        "calls": 48
+      },
+      {
+        "method": "MC2",
+        "rank": [
+          1,
+          0
+        ],
+        "before_rows": 1,
+        "expected_router_rows": 8,
+        "expected_shards": "[8, 8]",
+        "expected_ranges": "[[0, 1], [8, 0]]",
+        "calls": 48
+      },
+      {
+        "method": "MC2",
+        "rank": [
+          0,
+          0
+        ],
+        "before_rows": 8,
+        "expected_router_rows": 8,
+        "expected_shards": "[8, 8]",
+        "expected_ranges": "[[0, 8], [8, 8]]",
+        "calls": 48
+      },
+      {
+        "method": "MC2",
+        "rank": [
+          0,
+          1
+        ],
+        "before_rows": 8,
+        "expected_router_rows": 8,
+        "expected_shards": "[8, 8]",
+        "expected_ranges": "[[0, 8], [8, 8]]",
+        "calls": 48
+      },
+      {
+        "method": "ALLTOALL",
+        "rank": [
+          0,
+          0
+        ],
+        "before_rows": 1,
+        "expected_router_rows": 1,
+        "expected_shards": "[1, 1]",
+        "expected_ranges": "[[0, 1]]",
+        "calls": 48
+      },
+      {
+        "method": "ALLTOALL",
+        "rank": [
+          0,
+          1
+        ],
+        "before_rows": 1,
+        "expected_router_rows": 1,
+        "expected_shards": "[1, 1]",
+        "expected_ranges": "[[0, 1]]",
+        "calls": 48
+      },
+      {
+        "method": "ALLTOALL",
+        "rank": [
+          1,
+          0
+        ],
+        "before_rows": 9,
+        "expected_router_rows": 9,
+        "expected_shards": "[9, 9]",
+        "expected_ranges": "[[0, 17]]",
+        "calls": 48
+      },
+      {
+        "method": "ALLTOALL",
+        "rank": [
+          1,
+          1
+        ],
+        "before_rows": 9,
+        "expected_router_rows": 9,
+        "expected_shards": "[9, 9]",
+        "expected_ranges": "[[0, 17]]",
+        "calls": 48
+      },
+      {
+        "method": "ALLTOALL",
+        "rank": [
+          0,
+          0
+        ],
+        "before_rows": 5,
+        "expected_router_rows": 5,
+        "expected_shards": "[5, 5]",
+        "expected_ranges": "[[0, 10]]",
+        "calls": 48
+      },
+      {
+        "method": "ALLTOALL",
+        "rank": [
+          1,
+          1
+        ],
+        "before_rows": 257,
+        "expected_router_rows": 257,
+        "expected_shards": "[257, 257]",
+        "expected_ranges": "[[0, 514]]",
+        "calls": 48
+      },
+      {
+        "method": "ALLTOALL",
+        "rank": [
+          0,
+          1
+        ],
+        "before_rows": 5,
+        "expected_router_rows": 5,
+        "expected_shards": "[5, 5]",
+        "expected_ranges": "[[0, 10]]",
+        "calls": 48
+      },
+      {
+        "method": "ALLTOALL",
+        "rank": [
+          1,
+          0
+        ],
+        "before_rows": 257,
+        "expected_router_rows": 257,
+        "expected_shards": "[257, 257]",
+        "expected_ranges": "[[0, 514]]",
+        "calls": 48
+      },
+      {
+        "method": "MC2",
+        "rank": [
+          0,
+          1
+        ],
+        "before_rows": 1,
+        "expected_router_rows": 1,
+        "expected_shards": "[1, 1]",
+        "expected_ranges": "[[0, 1], [1, 1]]",
+        "calls": 336
+      },
+      {
+        "method": "MC2",
+        "rank": [
+          1,
+          1
+        ],
+        "before_rows": 1,
+        "expected_router_rows": 1,
+        "expected_shards": "[1, 1]",
+        "expected_ranges": "[[0, 1], [1, 1]]",
+        "calls": 336
+      },
+      {
+        "method": "MC2",
+        "rank": [
+          0,
+          0
+        ],
+        "before_rows": 1,
+        "expected_router_rows": 1,
+        "expected_shards": "[1, 1]",
+        "expected_ranges": "[[0, 1], [1, 1]]",
+        "calls": 336
+      },
+      {
+        "method": "MC2",
+        "rank": [
+          1,
+          0
+        ],
+        "before_rows": 1,
+        "expected_router_rows": 1,
+        "expected_shards": "[1, 1]",
+        "expected_ranges": "[[0, 1], [1, 1]]",
+        "calls": 336
+      }
+    ]
+  }
+}

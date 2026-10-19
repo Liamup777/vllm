@@ -1,0 +1,11 @@
+{
+  "vllm_ascend/libvllm_ascend_kernels.so": "914be7fff7a7f6cc9f354f450586514fb1b5f873c0b29a4d5f4b2549fe3f53c0",
+  "vllm_ascend/vllm_ascend_C.cpython-312-aarch64-linux-gnu.so": "da7b24b07e819fed513181dc7284bb7e9a59061d78ee27761679c454cfd0a199",
+  "vllm_ascend/lib64/libvllm_ascend_kernels.so": "3bc8b5a626da5694f359cf53d848c400ffe847035ac30ff82f02365eeef638e3",
+  "vllm_ascend/lib/libvllm_ascend_kernels.so": "914be7fff7a7f6cc9f354f450586514fb1b5f873c0b29a4d5f4b2549fe3f53c0",
+  "vllm_ascend/_cann_ops_custom/vendors/custom_transformer/op_impl/cpu/aicpu_kernel/impl/libtransformer_aicpu_kernels.so": "8d6ab18e1db8d3ced5020bc8ff345bcf6afc4dfa56893cea648f6e231d56cc54",
+  "vllm_ascend/_cann_ops_custom/vendors/custom_transformer/op_impl/ai_core/tbe/op_tiling/liboptiling.so": "ab074eb30a4ddc9b64142fe8b7eeb4068ceb6254b35e45c891de85522a1070b5",
+  "vllm_ascend/_cann_ops_custom/vendors/custom_transformer/op_impl/ai_core/tbe/op_tiling/lib/linux/aarch64/libcust_opmaster_rt2.0.so": "ab074eb30a4ddc9b64142fe8b7eeb4068ceb6254b35e45c891de85522a1070b5",
+  "vllm_ascend/_cann_ops_custom/vendors/custom_transformer/op_api/lib/libcust_opapi.so": "ba9815e06f34d1f84ab7b6c19b7a9a5ff88ba8ef7918b79f0dcd1578e940203e",
+  "vllm_ascend/_cann_ops_custom/vendors/custom_transformer/op_proto/lib/linux/aarch64/libcust_opsproto_rt2.0.so": "98ca7d710522d175cfa9e3948d35bbb3256e518c6efb1d79ff023242718c6629"
+}

@@ -1,0 +1,11 @@
+{
+  "dp": 2,
+  "tp": 2,
+  "sp": false,
+  "ep": true,
+  "ep_world": 4,
+  "lora": false,
+  "fused": 0,
+  "policy": "FUSED_OR_CAPACITY",
+  "capacity": 16
+}

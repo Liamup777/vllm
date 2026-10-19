@@ -1,0 +1,422 @@
+{
+  "status": "PASS",
+  "finished": "2026-10-19T18:23:49.174850",
+  "upstream_commit": "bfed1cb65d2ae8c37b9ada7b45191bbb01224679",
+  "upstream_base": "852989f580820849113d67d13fd8053e279d0444",
+  "capture_sha256": "daf2eea480ed8af351fe4f9eca8a8b5bf4105c6ca8853f683a2b7a11db5ceb39",
+  "cases": [
+    {
+      "case": "01-ag-dp1-tp2",
+      "status": "PASS",
+      "configuration": {
+        "dp": 1,
+        "tp": 2,
+        "ep": false,
+        "sp": false,
+        "fused": 0
+      },
+      "requests": 4,
+      "worker_checks": 64,
+      "api_elements": 802560,
+      "worker_elements": 1605120,
+      "methods": {
+        "ALLGATHER": 3072
+      },
+      "graph_replay_logs": 0,
+      "uneven_tp_shards": false,
+      "internal_padding": false,
+      "layout_log_status": "PASS",
+      "runtime_compatibility_variant": "initial"
+    },
+    {
+      "case": "02-ag-dp2-tp2",
+      "status": "PASS",
+      "configuration": {
+        "dp": 2,
+        "tp": 2,
+        "ep": false,
+        "sp": false,
+        "fused": 0
+      },
+      "requests": 8,
+      "worker_checks": 96,
+      "api_elements": 1014528,
+      "worker_elements": 2029056,
+      "methods": {
+        "ALLGATHER": 4608
+      },
+      "graph_replay_logs": 0,
+      "uneven_tp_shards": false,
+      "internal_padding": false,
+      "layout_log_status": "PASS",
+      "runtime_compatibility_variant": "initial"
+    },
+    {
+      "case": "03-ep-dp1-tp2",
+      "status": "PASS",
+      "configuration": {
+        "dp": 1,
+        "tp": 2,
+        "ep": true,
+        "sp": false,
+        "fused": 0
+      },
+      "requests": 7,
+      "worker_checks": 112,
+      "api_elements": 829056,
+      "worker_elements": 1658112,
+      "methods": {
+        "MC2": 5184,
+        "ALLTOALL": 192
+      },
+      "graph_replay_logs": 0,
+      "uneven_tp_shards": true,
+      "internal_padding": false,
+      "layout_log_status": "PASS",
+      "runtime_compatibility_variant": "initial"
+    },
+    {
+      "case": "04-ep-dp2-tp2",
+      "status": "PASS",
+      "configuration": {
+        "dp": 2,
+        "tp": 2,
+        "ep": true,
+        "sp": false,
+        "fused": 0
+      },
+      "requests": 11,
+      "worker_checks": 144,
+      "api_elements": 1041024,
+      "worker_elements": 2082048,
+      "methods": {
+        "MC2": 6528,
+        "ALLTOALL": 384
+      },
+      "graph_replay_logs": 0,
+      "uneven_tp_shards": true,
+      "internal_padding": false,
+      "layout_log_status": "PASS",
+      "runtime_compatibility_variant": "initial"
+    },
+    {
+      "case": "05-ep-dp2-tp2-sp",
+      "status": "PASS",
+      "configuration": {
+        "dp": 2,
+        "tp": 2,
+        "ep": true,
+        "sp": true,
+        "fused": 0
+      },
+      "requests": 11,
+      "worker_checks": 144,
+      "api_elements": 1041024,
+      "worker_elements": 2082048,
+      "methods": {
+        "MC2": 6528,
+        "ALLTOALL": 384
+      },
+      "graph_replay_logs": 0,
+      "uneven_tp_shards": false,
+      "internal_padding": false,
+      "layout_log_status": "PASS",
+      "runtime_compatibility_variant": "initial"
+    },
+    {
+      "case": "06-ag-dp1-tp1",
+      "status": "PASS",
+      "configuration": {
+        "dp": 1,
+        "tp": 1,
+        "ep": false,
+        "sp": false,
+        "fused": 0
+      },
+      "requests": 4,
+      "worker_checks": 32,
+      "api_elements": 802560,
+      "worker_elements": 802560,
+      "methods": {
+        "ALLGATHER": 1536
+      },
+      "graph_replay_logs": 0,
+      "uneven_tp_shards": false,
+      "internal_padding": false,
+      "layout_log_status": "PASS",
+      "runtime_compatibility_variant": "retry"
+    },
+    {
+      "case": "07-ep-dp2-tp1",
+      "status": "PASS",
+      "configuration": {
+        "dp": 2,
+        "tp": 1,
+        "ep": true,
+        "sp": false,
+        "fused": 0
+      },
+      "requests": 11,
+      "worker_checks": 72,
+      "api_elements": 1041024,
+      "worker_elements": 1041024,
+      "methods": {
+        "MC2": 3264,
+        "ALLTOALL": 192
+      },
+      "graph_replay_logs": 0,
+      "uneven_tp_shards": false,
+      "internal_padding": false,
+      "layout_log_status": "PASS",
+      "runtime_compatibility_variant": "initial"
+    },
+    {
+      "case": "08-ep-dp1-tp4",
+      "status": "PASS",
+      "configuration": {
+        "dp": 1,
+        "tp": 4,
+        "ep": true,
+        "sp": false,
+        "fused": 0
+      },
+      "requests": 7,
+      "worker_checks": 224,
+      "api_elements": 829056,
+      "worker_elements": 3316224,
+      "methods": {
+        "MC2": 10368,
+        "ALLTOALL": 384
+      },
+      "graph_replay_logs": 0,
+      "uneven_tp_shards": true,
+      "internal_padding": false,
+      "layout_log_status": "PASS",
+      "runtime_compatibility_variant": "initial"
+    },
+    {
+      "case": "09-fused-dp1-tp2",
+      "status": "PASS",
+      "configuration": {
+        "dp": 1,
+        "tp": 2,
+        "ep": true,
+        "sp": false,
+        "fused": 1
+      },
+      "requests": 4,
+      "worker_checks": 64,
+      "api_elements": 802560,
+      "worker_elements": 1605120,
+      "methods": {
+        "FUSED_MC2": 3072
+      },
+      "graph_replay_logs": 0,
+      "uneven_tp_shards": false,
+      "internal_padding": false,
+      "layout_log_status": "PASS",
+      "runtime_compatibility_variant": "initial"
+    },
+    {
+      "case": "10-fused-dp2-tp2",
+      "status": "PASS",
+      "configuration": {
+        "dp": 2,
+        "tp": 2,
+        "ep": true,
+        "sp": false,
+        "fused": 1
+      },
+      "requests": 8,
+      "worker_checks": 96,
+      "api_elements": 1014528,
+      "worker_elements": 2029056,
+      "methods": {
+        "FUSED_MC2": 4608
+      },
+      "graph_replay_logs": 0,
+      "uneven_tp_shards": false,
+      "internal_padding": false,
+      "layout_log_status": "PASS",
+      "runtime_compatibility_variant": "initial"
+    },
+    {
+      "case": "11-fused-dp2-tp2-sp",
+      "status": "PASS",
+      "configuration": {
+        "dp": 2,
+        "tp": 2,
+        "ep": true,
+        "sp": true,
+        "fused": 1
+      },
+      "requests": 8,
+      "worker_checks": 96,
+      "api_elements": 1014528,
+      "worker_elements": 2029056,
+      "methods": {
+        "FUSED_MC2": 4608
+      },
+      "graph_replay_logs": 0,
+      "uneven_tp_shards": false,
+      "internal_padding": true,
+      "layout_log_status": "PASS",
+      "runtime_compatibility_variant": "initial"
+    },
+    {
+      "case": "12-graph-ag-dp1-tp2",
+      "status": "PASS",
+      "configuration": {
+        "dp": 1,
+        "tp": 2,
+        "ep": false,
+        "sp": false,
+        "fused": 0,
+        "graph": true
+      },
+      "requests": 4,
+      "worker_checks": 64,
+      "api_elements": 802560,
+      "worker_elements": 1605120,
+      "methods": {
+        "ALLGATHER": 3072
+      },
+      "graph_replay_logs": 1,
+      "uneven_tp_shards": false,
+      "internal_padding": false,
+      "layout_log_status": "INCONCLUSIVE",
+      "runtime_compatibility_variant": "initial"
+    },
+    {
+      "case": "13-graph-ep-dp2-tp2-sp",
+      "status": "PASS",
+      "configuration": {
+        "dp": 2,
+        "tp": 2,
+        "ep": true,
+        "sp": true,
+        "fused": 0,
+        "graph": true
+      },
+      "requests": 11,
+      "worker_checks": 148,
+      "api_elements": 1041024,
+      "worker_elements": 2082048,
+      "methods": {
+        "MC2": 6720,
+        "ALLTOALL": 384
+      },
+      "graph_replay_logs": 2,
+      "uneven_tp_shards": false,
+      "internal_padding": false,
+      "layout_log_status": "INCONCLUSIVE",
+      "runtime_compatibility_variant": "retry"
+    },
+    {
+      "case": "15-lora-ep-dp1-tp2",
+      "status": "PASS",
+      "configuration": {
+        "dp": 1,
+        "tp": 2,
+        "ep": true,
+        "sp": false,
+        "fused": 0,
+        "lora": true
+      },
+      "requests": 4,
+      "worker_checks": 64,
+      "api_elements": 802560,
+      "worker_elements": 1605120,
+      "methods": {
+        "ALLTOALL": 3072
+      },
+      "graph_replay_logs": 0,
+      "uneven_tp_shards": true,
+      "internal_padding": false,
+      "layout_log_status": "PASS",
+      "runtime_compatibility_variant": "initial"
+    },
+    {
+      "case": "16-sp-internal-padding",
+      "status": "PASS",
+      "configuration": {
+        "dp": 2,
+        "tp": 2,
+        "ep": true,
+        "sp": true,
+        "fused": 0,
+        "internal": true
+      },
+      "requests": 17,
+      "worker_checks": 240,
+      "api_elements": 1077888,
+      "worker_elements": 2155776,
+      "methods": {
+        "MC2": 11136,
+        "ALLTOALL": 384
+      },
+      "graph_replay_logs": 0,
+      "uneven_tp_shards": false,
+      "internal_padding": true,
+      "layout_log_status": "PASS",
+      "runtime_compatibility_variant": "initial"
+    },
+    {
+      "case": "17-graph-sp-internal-padding",
+      "status": "PASS",
+      "configuration": {
+        "dp": 2,
+        "tp": 2,
+        "ep": true,
+        "sp": true,
+        "fused": 0,
+        "internal": true,
+        "graph": true
+      },
+      "requests": 17,
+      "worker_checks": 246,
+      "api_elements": 1077888,
+      "worker_elements": 2155776,
+      "methods": {
+        "MC2": 11232,
+        "ALLTOALL": 576
+      },
+      "graph_replay_logs": 2,
+      "uneven_tp_shards": false,
+      "internal_padding": false,
+      "layout_log_status": "INCONCLUSIVE",
+      "runtime_compatibility_variant": "retry"
+    },
+    {
+      "case": "18-graph-fused-dp2-tp2-sp",
+      "status": "PASS",
+      "configuration": {
+        "dp": 2,
+        "tp": 2,
+        "ep": true,
+        "sp": true,
+        "fused": 1,
+        "graph": true
+      },
+      "requests": 8,
+      "worker_checks": 100,
+      "api_elements": 1014528,
+      "worker_elements": 2029056,
+      "methods": {
+        "FUSED_MC2": 4800
+      },
+      "graph_replay_logs": 2,
+      "uneven_tp_shards": false,
+      "internal_padding": true,
+      "layout_log_status": "INCONCLUSIVE",
+      "runtime_compatibility_variant": "retry"
+    }
+  ],
+  "requests": 144,
+  "api_elements": 16048896,
+  "worker_elements": 31912320,
+  "mismatches": 0,
+  "offline_recheck": "PASS",
+  "source_provenance": "PASS",
+  "original_ascend_sources_unchanged": true
+}

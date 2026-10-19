@@ -1,0 +1,445 @@
+{
+  "status": "PASS",
+  "scope": "Scenario-based communication selection and layout assertions, response invariants; token ownership equivalence needs a reference run",
+  "arguments": {
+    "model": "/mnt/weight/Qwen3-30B-A3B-W8A8",
+    "served_model": "moe",
+    "url": "http://127.0.0.1:18267",
+    "log_file": "/home/lingmutian/capture-main-20261019/e2e/results/06-ag-dp1-tp1/server.log",
+    "dp": 1,
+    "tp": 1,
+    "sp": "off",
+    "expect_comm": "ALLGATHER",
+    "long_tokens": 2049,
+    "max_tokens": 8,
+    "output": "/home/lingmutian/capture-main-20261019/e2e/results/06-ag-dp1-tp1/verification",
+    "reference_dir": null,
+    "scenario": "/home/lingmutian/capture-main-20261019/e2e/results/06-ag-dp1-tp1/scenario.json",
+    "require_uneven_shards": false,
+    "require_internal_padding": false,
+    "skip_general_concurrency": false
+  },
+  "requests": [
+    {
+      "case": "long",
+      "requested_prompt_tokens": 2049,
+      "config_hash": "3941974498b177ff565f9a14c4ff21015f193dc679aec272c13d2464a9d225b1",
+      "input_hash": "5731b620c22a1427e2d7119dada05ea703fd55825207e960cf76cd1fc2f34009",
+      "http": 200,
+      "status": "PASS",
+      "shape": [
+        2056,
+        48,
+        8
+      ],
+      "generated_ids": [
+        1124,
+        1124,
+        1124,
+        1124,
+        1124,
+        1124,
+        1124,
+        1124
+      ],
+      "expert_min": 0,
+      "expert_max": 127,
+      "dtype": "uint8",
+      "response_validated": true,
+      "seconds": 1.273,
+      "selection_layout": {
+        "errors": [],
+        "coverage_missing": [],
+        "selection_events": 8,
+        "layout_events": 384,
+        "selections": [
+          {
+            "rank": [
+              0,
+              0
+            ],
+            "tokens": 2049,
+            "expected": "ALLGATHER",
+            "actual": "ALLGATHER",
+            "calls": 1
+          },
+          {
+            "rank": [
+              0,
+              0
+            ],
+            "tokens": 1,
+            "expected": "ALLGATHER",
+            "actual": "ALLGATHER",
+            "calls": 7
+          }
+        ],
+        "layouts": [
+          {
+            "method": "ALLGATHER",
+            "rank": [
+              0,
+              0
+            ],
+            "before_rows": 2049,
+            "expected_router_rows": 2049,
+            "expected_shards": "[]",
+            "expected_ranges": "[[0, 2049]]",
+            "calls": 48
+          },
+          {
+            "method": "ALLGATHER",
+            "rank": [
+              0,
+              0
+            ],
+            "before_rows": 1,
+            "expected_router_rows": 1,
+            "expected_shards": "[]",
+            "expected_ranges": "[[0, 1]]",
+            "calls": 336
+          }
+        ]
+      }
+    },
+    {
+      "case": "short-1",
+      "requested_prompt_tokens": 1,
+      "config_hash": "3941974498b177ff565f9a14c4ff21015f193dc679aec272c13d2464a9d225b1",
+      "input_hash": "c711fa0bfab51af07e3aa6a6e55ed07d4f6f34d672d40f9165aa85e79f5cd64a",
+      "http": 200,
+      "status": "PASS",
+      "shape": [
+        8,
+        48,
+        8
+      ],
+      "generated_ids": [
+        1124,
+        1318,
+        90,
+        374,
+        264,
+        10250,
+        1372,
+        92
+      ],
+      "expert_min": 0,
+      "expert_max": 127,
+      "dtype": "uint8",
+      "response_validated": true,
+      "seconds": 1.152,
+      "selection_layout": {
+        "errors": [],
+        "coverage_missing": [],
+        "selection_events": 8,
+        "layout_events": 384,
+        "selections": [
+          {
+            "rank": [
+              0,
+              0
+            ],
+            "tokens": 1,
+            "expected": "ALLGATHER",
+            "actual": "ALLGATHER",
+            "calls": 8
+          }
+        ],
+        "layouts": [
+          {
+            "method": "ALLGATHER",
+            "rank": [
+              0,
+              0
+            ],
+            "before_rows": 1,
+            "expected_router_rows": 1,
+            "expected_shards": "[]",
+            "expected_ranges": "[[0, 1]]",
+            "calls": 384
+          }
+        ]
+      }
+    },
+    {
+      "case": "short-5",
+      "requested_prompt_tokens": 5,
+      "config_hash": "3941974498b177ff565f9a14c4ff21015f193dc679aec272c13d2464a9d225b1",
+      "input_hash": "db33be92c929c8a58ea4f716a9463680ac58894f11f40cab62219ed05bbd38ae",
+      "http": 200,
+      "status": "PASS",
+      "shape": [
+        12,
+        48,
+        8
+      ],
+      "generated_ids": [
+        1124,
+        77,
+        1699,
+        1699,
+        1699,
+        1699,
+        1699,
+        1699
+      ],
+      "expert_min": 0,
+      "expert_max": 127,
+      "dtype": "uint8",
+      "response_validated": true,
+      "seconds": 1.117,
+      "selection_layout": {
+        "errors": [],
+        "coverage_missing": [],
+        "selection_events": 8,
+        "layout_events": 384,
+        "selections": [
+          {
+            "rank": [
+              0,
+              0
+            ],
+            "tokens": 5,
+            "expected": "ALLGATHER",
+            "actual": "ALLGATHER",
+            "calls": 1
+          },
+          {
+            "rank": [
+              0,
+              0
+            ],
+            "tokens": 1,
+            "expected": "ALLGATHER",
+            "actual": "ALLGATHER",
+            "calls": 7
+          }
+        ],
+        "layouts": [
+          {
+            "method": "ALLGATHER",
+            "rank": [
+              0,
+              0
+            ],
+            "before_rows": 5,
+            "expected_router_rows": 5,
+            "expected_shards": "[]",
+            "expected_ranges": "[[0, 5]]",
+            "calls": 48
+          },
+          {
+            "method": "ALLGATHER",
+            "rank": [
+              0,
+              0
+            ],
+            "before_rows": 1,
+            "expected_router_rows": 1,
+            "expected_shards": "[]",
+            "expected_ranges": "[[0, 1]]",
+            "calls": 336
+          }
+        ]
+      }
+    },
+    {
+      "case": "short-7",
+      "requested_prompt_tokens": 7,
+      "config_hash": "3941974498b177ff565f9a14c4ff21015f193dc679aec272c13d2464a9d225b1",
+      "input_hash": "6c5c75cfae85b153234ff546f660c0c3b4d4a1f034429ccd135cb3d23763a3f1",
+      "http": 200,
+      "status": "PASS",
+      "shape": [
+        14,
+        48,
+        8
+      ],
+      "generated_ids": [
+        1124,
+        1318,
+        90,
+        320,
+        16,
+        9139,
+        3422,
+        198
+      ],
+      "expert_min": 0,
+      "expert_max": 127,
+      "dtype": "uint8",
+      "response_validated": true,
+      "seconds": 1.118,
+      "selection_layout": {
+        "errors": [],
+        "coverage_missing": [],
+        "selection_events": 8,
+        "layout_events": 384,
+        "selections": [
+          {
+            "rank": [
+              0,
+              0
+            ],
+            "tokens": 7,
+            "expected": "ALLGATHER",
+            "actual": "ALLGATHER",
+            "calls": 1
+          },
+          {
+            "rank": [
+              0,
+              0
+            ],
+            "tokens": 1,
+            "expected": "ALLGATHER",
+            "actual": "ALLGATHER",
+            "calls": 7
+          }
+        ],
+        "layouts": [
+          {
+            "method": "ALLGATHER",
+            "rank": [
+              0,
+              0
+            ],
+            "before_rows": 7,
+            "expected_router_rows": 7,
+            "expected_shards": "[]",
+            "expected_ranges": "[[0, 7]]",
+            "calls": 48
+          },
+          {
+            "method": "ALLGATHER",
+            "rank": [
+              0,
+              0
+            ],
+            "before_rows": 1,
+            "expected_router_rows": 1,
+            "expected_shards": "[]",
+            "expected_ranges": "[[0, 1]]",
+            "calls": 336
+          }
+        ]
+      }
+    }
+  ],
+  "log_audit": {
+    "errors": [],
+    "coverage_missing": [],
+    "methods": {
+      "ALLGATHER": 1536
+    },
+    "ranks": [
+      [
+        0,
+        0
+      ]
+    ],
+    "matched_layer_calls": 1536,
+    "uneven_tp_shards_observed": false,
+    "internal_padding_skip_observed": false
+  },
+  "failures": [],
+  "selection_layout_audit": {
+    "errors": [],
+    "coverage_missing": [],
+    "selection_events": 32,
+    "layout_events": 1536,
+    "selections": [
+      {
+        "rank": [
+          0,
+          0
+        ],
+        "tokens": 1,
+        "expected": "ALLGATHER",
+        "actual": "ALLGATHER",
+        "calls": 29
+      },
+      {
+        "rank": [
+          0,
+          0
+        ],
+        "tokens": 5,
+        "expected": "ALLGATHER",
+        "actual": "ALLGATHER",
+        "calls": 1
+      },
+      {
+        "rank": [
+          0,
+          0
+        ],
+        "tokens": 7,
+        "expected": "ALLGATHER",
+        "actual": "ALLGATHER",
+        "calls": 1
+      },
+      {
+        "rank": [
+          0,
+          0
+        ],
+        "tokens": 2049,
+        "expected": "ALLGATHER",
+        "actual": "ALLGATHER",
+        "calls": 1
+      }
+    ],
+    "layouts": [
+      {
+        "method": "ALLGATHER",
+        "rank": [
+          0,
+          0
+        ],
+        "before_rows": 1,
+        "expected_router_rows": 1,
+        "expected_shards": "[]",
+        "expected_ranges": "[[0, 1]]",
+        "calls": 1392
+      },
+      {
+        "method": "ALLGATHER",
+        "rank": [
+          0,
+          0
+        ],
+        "before_rows": 5,
+        "expected_router_rows": 5,
+        "expected_shards": "[]",
+        "expected_ranges": "[[0, 5]]",
+        "calls": 48
+      },
+      {
+        "method": "ALLGATHER",
+        "rank": [
+          0,
+          0
+        ],
+        "before_rows": 7,
+        "expected_router_rows": 7,
+        "expected_shards": "[]",
+        "expected_ranges": "[[0, 7]]",
+        "calls": 48
+      },
+      {
+        "method": "ALLGATHER",
+        "rank": [
+          0,
+          0
+        ],
+        "before_rows": 2049,
+        "expected_router_rows": 2049,
+        "expected_shards": "[]",
+        "expected_ranges": "[[0, 2049]]",
+        "calls": 48
+      }
+    ]
+  }
+}

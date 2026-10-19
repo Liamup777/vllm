@@ -1,0 +1,24 @@
+--- a/vllm_ascend/platform.py
++++ b/vllm_ascend/platform.py
+@@ -1315,7 +1315,8 @@
+         and requires_tp_aligned_capture_sizes
+     ):
+         original_sizes = compilation_config.cudagraph_capture_sizes
+-        sp_aclgraph_sizes = vllm_config.update_sizes_for_sequence_parallelism(original_sizes)
++        sp_aclgraph_sizes = [size for size in original_sizes
++                             if size % vllm_config.parallel_config.tensor_parallel_size == 0]
+         if not sp_aclgraph_sizes:
+             raise AssertionError(
+                 f"cudagraph_capture_sizes {original_sizes} does not contain"
+--- a/vllm_ascend/worker/v2/model_runner.py
++++ b/vllm_ascend/worker/v2/model_runner.py
+@@ -25,6 +25,9 @@
+ 
+ import numpy as np
+ import torch
++
++# Preserve the NPU initialization previously performed by the eager runner import.
++torch.npu.config.allow_internal_format = True
+ from vllm.compilation import breakable_cudagraph
+ from vllm.config import VllmConfig
+ from vllm.config.compilation import CompilationMode, CUDAGraphMode

@@ -1,0 +1,691 @@
+{
+  "status": "PASS",
+  "scope": "Scenario-based communication selection and layout assertions, response invariants; token ownership equivalence needs a reference run",
+  "arguments": {
+    "model": "/mnt/weight/Qwen3-30B-A3B-W8A8",
+    "served_model": "moe",
+    "url": "http://127.0.0.1:18270",
+    "log_file": "/home/lingmutian/capture-main-20261019/e2e/results/09-fused-dp1-tp2/server.log",
+    "dp": 1,
+    "tp": 2,
+    "sp": "off",
+    "expect_comm": "FUSED_MC2",
+    "long_tokens": 2049,
+    "max_tokens": 8,
+    "output": "/home/lingmutian/capture-main-20261019/e2e/results/09-fused-dp1-tp2/verification",
+    "reference_dir": null,
+    "scenario": "/home/lingmutian/capture-main-20261019/e2e/results/09-fused-dp1-tp2/scenario.json",
+    "require_uneven_shards": false,
+    "require_internal_padding": false,
+    "skip_general_concurrency": false
+  },
+  "requests": [
+    {
+      "case": "long",
+      "requested_prompt_tokens": 2049,
+      "config_hash": "3941974498b177ff565f9a14c4ff21015f193dc679aec272c13d2464a9d225b1",
+      "input_hash": "5731b620c22a1427e2d7119dada05ea703fd55825207e960cf76cd1fc2f34009",
+      "http": 200,
+      "status": "PASS",
+      "shape": [
+        2056,
+        48,
+        8
+      ],
+      "generated_ids": [
+        108263,
+        108263,
+        82254,
+        95515,
+        89573,
+        76907,
+        34122,
+        108263
+      ],
+      "expert_min": 0,
+      "expert_max": 127,
+      "dtype": "uint8",
+      "response_validated": true,
+      "seconds": 1.544,
+      "selection_layout": {
+        "errors": [],
+        "coverage_missing": [],
+        "selection_events": 16,
+        "layout_events": 768,
+        "selections": [
+          {
+            "rank": [
+              0,
+              1
+            ],
+            "tokens": 2049,
+            "expected": "FUSED_MC2",
+            "actual": "FUSED_MC2",
+            "calls": 1
+          },
+          {
+            "rank": [
+              0,
+              0
+            ],
+            "tokens": 2049,
+            "expected": "FUSED_MC2",
+            "actual": "FUSED_MC2",
+            "calls": 1
+          },
+          {
+            "rank": [
+              0,
+              1
+            ],
+            "tokens": 1,
+            "expected": "FUSED_MC2",
+            "actual": "FUSED_MC2",
+            "calls": 7
+          },
+          {
+            "rank": [
+              0,
+              0
+            ],
+            "tokens": 1,
+            "expected": "FUSED_MC2",
+            "actual": "FUSED_MC2",
+            "calls": 7
+          }
+        ],
+        "layouts": [
+          {
+            "method": "FUSED_MC2",
+            "rank": [
+              0,
+              1
+            ],
+            "before_rows": 2049,
+            "expected_router_rows": 1025,
+            "expected_shards": "[1025, 1025]",
+            "expected_ranges": "[[0, 2049]]",
+            "calls": 48
+          },
+          {
+            "method": "FUSED_MC2",
+            "rank": [
+              0,
+              0
+            ],
+            "before_rows": 2049,
+            "expected_router_rows": 1025,
+            "expected_shards": "[1025, 1025]",
+            "expected_ranges": "[[0, 2049]]",
+            "calls": 48
+          },
+          {
+            "method": "FUSED_MC2",
+            "rank": [
+              0,
+              1
+            ],
+            "before_rows": 1,
+            "expected_router_rows": 1,
+            "expected_shards": "[1, 1]",
+            "expected_ranges": "[[0, 1]]",
+            "calls": 336
+          },
+          {
+            "method": "FUSED_MC2",
+            "rank": [
+              0,
+              0
+            ],
+            "before_rows": 1,
+            "expected_router_rows": 1,
+            "expected_shards": "[1, 1]",
+            "expected_ranges": "[[0, 1]]",
+            "calls": 336
+          }
+        ]
+      }
+    },
+    {
+      "case": "short-1",
+      "requested_prompt_tokens": 1,
+      "config_hash": "3941974498b177ff565f9a14c4ff21015f193dc679aec272c13d2464a9d225b1",
+      "input_hash": "c711fa0bfab51af07e3aa6a6e55ed07d4f6f34d672d40f9165aa85e79f5cd64a",
+      "http": 200,
+      "status": "PASS",
+      "shape": [
+        8,
+        48,
+        8
+      ],
+      "generated_ids": [
+        84290,
+        100811,
+        37616,
+        87670,
+        101486,
+        62802,
+        40542,
+        70091
+      ],
+      "expert_min": 0,
+      "expert_max": 127,
+      "dtype": "uint8",
+      "response_validated": true,
+      "seconds": 1.582,
+      "selection_layout": {
+        "errors": [],
+        "coverage_missing": [],
+        "selection_events": 16,
+        "layout_events": 768,
+        "selections": [
+          {
+            "rank": [
+              0,
+              0
+            ],
+            "tokens": 1,
+            "expected": "FUSED_MC2",
+            "actual": "FUSED_MC2",
+            "calls": 8
+          },
+          {
+            "rank": [
+              0,
+              1
+            ],
+            "tokens": 1,
+            "expected": "FUSED_MC2",
+            "actual": "FUSED_MC2",
+            "calls": 8
+          }
+        ],
+        "layouts": [
+          {
+            "method": "FUSED_MC2",
+            "rank": [
+              0,
+              0
+            ],
+            "before_rows": 1,
+            "expected_router_rows": 1,
+            "expected_shards": "[1, 1]",
+            "expected_ranges": "[[0, 1]]",
+            "calls": 384
+          },
+          {
+            "method": "FUSED_MC2",
+            "rank": [
+              0,
+              1
+            ],
+            "before_rows": 1,
+            "expected_router_rows": 1,
+            "expected_shards": "[1, 1]",
+            "expected_ranges": "[[0, 1]]",
+            "calls": 384
+          }
+        ]
+      }
+    },
+    {
+      "case": "short-5",
+      "requested_prompt_tokens": 5,
+      "config_hash": "3941974498b177ff565f9a14c4ff21015f193dc679aec272c13d2464a9d225b1",
+      "input_hash": "db33be92c929c8a58ea4f716a9463680ac58894f11f40cab62219ed05bbd38ae",
+      "http": 200,
+      "status": "PASS",
+      "shape": [
+        12,
+        48,
+        8
+      ],
+      "generated_ids": [
+        58861,
+        105527,
+        30062,
+        120330,
+        39629,
+        91069,
+        111836,
+        29714
+      ],
+      "expert_min": 0,
+      "expert_max": 127,
+      "dtype": "uint8",
+      "response_validated": true,
+      "seconds": 1.406,
+      "selection_layout": {
+        "errors": [],
+        "coverage_missing": [],
+        "selection_events": 16,
+        "layout_events": 768,
+        "selections": [
+          {
+            "rank": [
+              0,
+              0
+            ],
+            "tokens": 5,
+            "expected": "FUSED_MC2",
+            "actual": "FUSED_MC2",
+            "calls": 1
+          },
+          {
+            "rank": [
+              0,
+              1
+            ],
+            "tokens": 5,
+            "expected": "FUSED_MC2",
+            "actual": "FUSED_MC2",
+            "calls": 1
+          },
+          {
+            "rank": [
+              0,
+              0
+            ],
+            "tokens": 1,
+            "expected": "FUSED_MC2",
+            "actual": "FUSED_MC2",
+            "calls": 7
+          },
+          {
+            "rank": [
+              0,
+              1
+            ],
+            "tokens": 1,
+            "expected": "FUSED_MC2",
+            "actual": "FUSED_MC2",
+            "calls": 7
+          }
+        ],
+        "layouts": [
+          {
+            "method": "FUSED_MC2",
+            "rank": [
+              0,
+              0
+            ],
+            "before_rows": 5,
+            "expected_router_rows": 3,
+            "expected_shards": "[3, 3]",
+            "expected_ranges": "[[0, 5]]",
+            "calls": 48
+          },
+          {
+            "method": "FUSED_MC2",
+            "rank": [
+              0,
+              1
+            ],
+            "before_rows": 5,
+            "expected_router_rows": 3,
+            "expected_shards": "[3, 3]",
+            "expected_ranges": "[[0, 5]]",
+            "calls": 48
+          },
+          {
+            "method": "FUSED_MC2",
+            "rank": [
+              0,
+              0
+            ],
+            "before_rows": 1,
+            "expected_router_rows": 1,
+            "expected_shards": "[1, 1]",
+            "expected_ranges": "[[0, 1]]",
+            "calls": 336
+          },
+          {
+            "method": "FUSED_MC2",
+            "rank": [
+              0,
+              1
+            ],
+            "before_rows": 1,
+            "expected_router_rows": 1,
+            "expected_shards": "[1, 1]",
+            "expected_ranges": "[[0, 1]]",
+            "calls": 336
+          }
+        ]
+      }
+    },
+    {
+      "case": "short-7",
+      "requested_prompt_tokens": 7,
+      "config_hash": "3941974498b177ff565f9a14c4ff21015f193dc679aec272c13d2464a9d225b1",
+      "input_hash": "6c5c75cfae85b153234ff546f660c0c3b4d4a1f034429ccd135cb3d23763a3f1",
+      "http": 200,
+      "status": "PASS",
+      "shape": [
+        14,
+        48,
+        8
+      ],
+      "generated_ids": [
+        116605,
+        51700,
+        25283,
+        4131,
+        14780,
+        86483,
+        106762,
+        107599
+      ],
+      "expert_min": 0,
+      "expert_max": 127,
+      "dtype": "uint8",
+      "response_validated": true,
+      "seconds": 1.411,
+      "selection_layout": {
+        "errors": [],
+        "coverage_missing": [],
+        "selection_events": 16,
+        "layout_events": 768,
+        "selections": [
+          {
+            "rank": [
+              0,
+              1
+            ],
+            "tokens": 7,
+            "expected": "FUSED_MC2",
+            "actual": "FUSED_MC2",
+            "calls": 1
+          },
+          {
+            "rank": [
+              0,
+              0
+            ],
+            "tokens": 7,
+            "expected": "FUSED_MC2",
+            "actual": "FUSED_MC2",
+            "calls": 1
+          },
+          {
+            "rank": [
+              0,
+              1
+            ],
+            "tokens": 1,
+            "expected": "FUSED_MC2",
+            "actual": "FUSED_MC2",
+            "calls": 7
+          },
+          {
+            "rank": [
+              0,
+              0
+            ],
+            "tokens": 1,
+            "expected": "FUSED_MC2",
+            "actual": "FUSED_MC2",
+            "calls": 7
+          }
+        ],
+        "layouts": [
+          {
+            "method": "FUSED_MC2",
+            "rank": [
+              0,
+              1
+            ],
+            "before_rows": 7,
+            "expected_router_rows": 4,
+            "expected_shards": "[4, 4]",
+            "expected_ranges": "[[0, 7]]",
+            "calls": 48
+          },
+          {
+            "method": "FUSED_MC2",
+            "rank": [
+              0,
+              0
+            ],
+            "before_rows": 7,
+            "expected_router_rows": 4,
+            "expected_shards": "[4, 4]",
+            "expected_ranges": "[[0, 7]]",
+            "calls": 48
+          },
+          {
+            "method": "FUSED_MC2",
+            "rank": [
+              0,
+              1
+            ],
+            "before_rows": 1,
+            "expected_router_rows": 1,
+            "expected_shards": "[1, 1]",
+            "expected_ranges": "[[0, 1]]",
+            "calls": 336
+          },
+          {
+            "method": "FUSED_MC2",
+            "rank": [
+              0,
+              0
+            ],
+            "before_rows": 1,
+            "expected_router_rows": 1,
+            "expected_shards": "[1, 1]",
+            "expected_ranges": "[[0, 1]]",
+            "calls": 336
+          }
+        ]
+      }
+    }
+  ],
+  "log_audit": {
+    "errors": [],
+    "coverage_missing": [],
+    "methods": {
+      "FUSED_MC2": 3072
+    },
+    "ranks": [
+      [
+        0,
+        0
+      ],
+      [
+        0,
+        1
+      ]
+    ],
+    "matched_layer_calls": 3072,
+    "uneven_tp_shards_observed": false,
+    "internal_padding_skip_observed": false
+  },
+  "failures": [],
+  "selection_layout_audit": {
+    "errors": [],
+    "coverage_missing": [],
+    "selection_events": 64,
+    "layout_events": 3072,
+    "selections": [
+      {
+        "rank": [
+          0,
+          0
+        ],
+        "tokens": 1,
+        "expected": "FUSED_MC2",
+        "actual": "FUSED_MC2",
+        "calls": 29
+      },
+      {
+        "rank": [
+          0,
+          1
+        ],
+        "tokens": 1,
+        "expected": "FUSED_MC2",
+        "actual": "FUSED_MC2",
+        "calls": 29
+      },
+      {
+        "rank": [
+          0,
+          0
+        ],
+        "tokens": 5,
+        "expected": "FUSED_MC2",
+        "actual": "FUSED_MC2",
+        "calls": 1
+      },
+      {
+        "rank": [
+          0,
+          1
+        ],
+        "tokens": 5,
+        "expected": "FUSED_MC2",
+        "actual": "FUSED_MC2",
+        "calls": 1
+      },
+      {
+        "rank": [
+          0,
+          1
+        ],
+        "tokens": 7,
+        "expected": "FUSED_MC2",
+        "actual": "FUSED_MC2",
+        "calls": 1
+      },
+      {
+        "rank": [
+          0,
+          0
+        ],
+        "tokens": 7,
+        "expected": "FUSED_MC2",
+        "actual": "FUSED_MC2",
+        "calls": 1
+      },
+      {
+        "rank": [
+          0,
+          1
+        ],
+        "tokens": 2049,
+        "expected": "FUSED_MC2",
+        "actual": "FUSED_MC2",
+        "calls": 1
+      },
+      {
+        "rank": [
+          0,
+          0
+        ],
+        "tokens": 2049,
+        "expected": "FUSED_MC2",
+        "actual": "FUSED_MC2",
+        "calls": 1
+      }
+    ],
+    "layouts": [
+      {
+        "method": "FUSED_MC2",
+        "rank": [
+          0,
+          0
+        ],
+        "before_rows": 1,
+        "expected_router_rows": 1,
+        "expected_shards": "[1, 1]",
+        "expected_ranges": "[[0, 1]]",
+        "calls": 1392
+      },
+      {
+        "method": "FUSED_MC2",
+        "rank": [
+          0,
+          1
+        ],
+        "before_rows": 1,
+        "expected_router_rows": 1,
+        "expected_shards": "[1, 1]",
+        "expected_ranges": "[[0, 1]]",
+        "calls": 1392
+      },
+      {
+        "method": "FUSED_MC2",
+        "rank": [
+          0,
+          0
+        ],
+        "before_rows": 5,
+        "expected_router_rows": 3,
+        "expected_shards": "[3, 3]",
+        "expected_ranges": "[[0, 5]]",
+        "calls": 48
+      },
+      {
+        "method": "FUSED_MC2",
+        "rank": [
+          0,
+          1
+        ],
+        "before_rows": 5,
+        "expected_router_rows": 3,
+        "expected_shards": "[3, 3]",
+        "expected_ranges": "[[0, 5]]",
+        "calls": 48
+      },
+      {
+        "method": "FUSED_MC2",
+        "rank": [
+          0,
+          1
+        ],
+        "before_rows": 7,
+        "expected_router_rows": 4,
+        "expected_shards": "[4, 4]",
+        "expected_ranges": "[[0, 7]]",
+        "calls": 48
+      },
+      {
+        "method": "FUSED_MC2",
+        "rank": [
+          0,
+          0
+        ],
+        "before_rows": 7,
+        "expected_router_rows": 4,
+        "expected_shards": "[4, 4]",
+        "expected_ranges": "[[0, 7]]",
+        "calls": 48
+      },
+      {
+        "method": "FUSED_MC2",
+        "rank": [
+          0,
+          1
+        ],
+        "before_rows": 2049,
+        "expected_router_rows": 1025,
+        "expected_shards": "[1025, 1025]",
+        "expected_ranges": "[[0, 2049]]",
+        "calls": 48
+      },
+      {
+        "method": "FUSED_MC2",
+        "rank": [
+          0,
+          0
+        ],
+        "before_rows": 2049,
+        "expected_router_rows": 1025,
+        "expected_shards": "[1025, 1025]",
+        "expected_ranges": "[[0, 2049]]",
+        "calls": 48
+      }
+    ]
+  }
+}

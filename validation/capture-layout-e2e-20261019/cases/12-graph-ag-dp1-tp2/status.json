@@ -1,0 +1,50 @@
+{
+  "case": "12-graph-ag-dp1-tp2",
+  "configuration": {
+    "dp": 1,
+    "tp": 2,
+    "ep": false,
+    "sp": false,
+    "fused": 0,
+    "graph": true
+  },
+  "start": "2026-10-19T18:04:55.730818",
+  "model": "/mnt/weight/Qwen3-30B-A3B",
+  "devices": [
+    8,
+    9
+  ],
+  "command": [
+    "/home/lingmutian/capture-main-20261019/.venv/bin/python",
+    "/home/lingmutian/capture-main-20261019/e2e/lane-b/tools/same_run_cli.py",
+    "serve",
+    "/mnt/weight/Qwen3-30B-A3B",
+    "--served-model-name",
+    "moe",
+    "--host",
+    "127.0.0.1",
+    "--port",
+    "18273",
+    "--enable-return-routed-experts",
+    "--enable-prefix-caching",
+    "--max-model-len",
+    "4096",
+    "--max-num-batched-tokens",
+    "4096",
+    "--max-num-seqs",
+    "16",
+    "--gpu-memory-utilization",
+    "0.75",
+    "--tensor-parallel-size",
+    "2",
+    "--additional-config",
+    "{\"enable_flashcomm1\": false, \"enable_fused_mc2\": 0, \"runtime_config\": {\"ascend_log\": {\"level\": \"INFO\", \"debug\": [\"vllm.logger\", \"vllm.model_executor.layers.fused_moe.routed_experts_capturer\"]}}}",
+    "--cudagraph-metrics"
+  ],
+  "server_pid": 202775,
+  "stage": "stopped",
+  "check_exit": 2,
+  "verification": "INCONCLUSIVE",
+  "same_run_exit": 0,
+  "end": "2026-10-19T18:07:39.736549"
+}
